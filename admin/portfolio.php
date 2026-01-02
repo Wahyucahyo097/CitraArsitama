@@ -20,28 +20,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = sanitize($_POST['description']);
     $category = sanitize($_POST['category']);
     $link = sanitize($_POST['link']);
+    $client = sanitize($_POST['client']);
+    $project_date = sanitize($_POST['project_date']);
 
     if ($action === 'add') {
-        $image = '';
-        if (!empty($_FILES['image']['name'])) {
+        $thumbnail = '';
+        if (!empty($_FILES['thumbnail']['name'])) {
             $target_dir = "../assets/img/portfolio/";
             if (!is_dir($target_dir)) mkdir($target_dir, 0755, true);
-            $image = basename($_FILES['image']['name']);
-            move_uploaded_file($_FILES['image']['tmp_name'], $target_dir . $image);
+            $thumbnail = basename($_FILES['thumbnail']['name']);
+            move_uploaded_file($_FILES['thumbnail']['tmp_name'], $target_dir . $thumbnail);
         }
-        $conn->query("INSERT INTO portfolio (title, description, category, image, link) VALUES ('$title', '$description', '$category', '$image', '$link')");
+        
+        $details_images = [];
+        if (!empty($_FILES['details_images']['name'][0])) {
+            $target_dir = "../assets/img/portfolio/details/";
+            if (!is_dir($target_dir)) mkdir($target_dir, 0755, true);
+            foreach ($_FILES['details_images']['name'] as $key => $name) {
+                if (!empty($name)) {
+                    $filename = basename($name);
+                    move_uploaded_file($_FILES['details_images']['tmp_name'][$key], $target_dir . $filename);
+                    $details_images[] = $filename;
+                }
+            }
+        }
+        $details_images_json = json_encode($details_images);
+        
+        $conn->query("INSERT INTO portfolio (title, description, category, thumbnail, details_images, link, client, project_date) VALUES ('$title', '$description', '$category', '$thumbnail', '$details_images_json', '$link', '$client', '$project_date')");
         $message = 'Portfolio berhasil ditambahkan!';
     } elseif ($action === 'edit') {
         $id = $_POST['id'];
-        $image = sanitize($_POST['old_image']);
+        $thumbnail = sanitize($_POST['old_thumbnail']);
         
-        if (!empty($_FILES['image']['name'])) {
+        if (!empty($_FILES['thumbnail']['name'])) {
             $target_dir = "../assets/img/portfolio/";
-            $image = basename($_FILES['image']['name']);
-            move_uploaded_file($_FILES['image']['tmp_name'], $target_dir . $image);
+            $thumbnail = basename($_FILES['thumbnail']['name']);
+            move_uploaded_file($_FILES['thumbnail']['tmp_name'], $target_dir . $thumbnail);
         }
         
-        $conn->query("UPDATE portfolio SET title='$title', description='$description', category='$category', image='$image', link='$link' WHERE id=$id");
+        $details_images = json_decode($_POST['old_details_images'], true) ?: [];
+        if (!empty($_FILES['details_images']['name'][0])) {
+            $target_dir = "../assets/img/portfolio/details/";
+            if (!is_dir($target_dir)) mkdir($target_dir, 0755, true);
+            foreach ($_FILES['details_images']['name'] as $key => $name) {
+                if (!empty($name)) {
+                    $filename = basename($name);
+                    move_uploaded_file($_FILES['details_images']['tmp_name'][$key], $target_dir . $filename);
+                    $details_images[] = $filename;
+                }
+            }
+        }
+        $details_images_json = json_encode($details_images);
+        
+        $conn->query("UPDATE portfolio SET title='$title', description='$description', category='$category', thumbnail='$thumbnail', details_images='$details_images_json', link='$link', client='$client', project_date='$project_date' WHERE id=$id");
         $message = 'Portfolio berhasil diubah!';
     }
     
@@ -78,7 +109,7 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
             <!-- Sidebar -->
             <nav class="col-md-2 d-md-block bg-dark sidebar">
                 <div class="sidebar-header">
-                    <h5 class="text-white mb-4 mt-3">CA Admin</h5>
+                    <h5 class="text-white mb-4 mt-3">Admin</h5>
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item">
@@ -152,7 +183,7 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
                                         <th>ID</th>
                                         <th>Title</th>
                                         <th>Category</th>
-                                        <th>Image</th>
+                                        <th>Thumbnail</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -162,7 +193,7 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
                                             <td><?php echo $row['id']; ?></td>
                                             <td><?php echo htmlspecialchars($row['title']); ?></td>
                                             <td><span class="badge bg-secondary"><?php echo htmlspecialchars($row['category']); ?></span></td>
-                                            <td><?php echo $row['image'] ? '<img src="../assets/img/portfolio/' . htmlspecialchars($row['image']) . '" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">' : '-'; ?></td>
+                                            <td><?php echo $row['thumbnail'] ? '<img src="../assets/img/portfolio/' . htmlspecialchars($row['thumbnail']) . '" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">' : '-'; ?></td>
                                             <td>
                                                 <a href="portfolio.php?action=edit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil"></i>
@@ -186,7 +217,8 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
                             <form method="POST" enctype="multipart/form-data">
                                 <?php if ($action === 'edit'): ?>
                                     <input type="hidden" name="id" value="<?php echo $edit_data['id']; ?>">
-                                    <input type="hidden" name="old_image" value="<?php echo htmlspecialchars($edit_data['image']); ?>">
+                                    <input type="hidden" name="old_thumbnail" value="<?php echo htmlspecialchars($edit_data['thumbnail']); ?>">
+                                    <input type="hidden" name="old_details_images" value="<?php echo htmlspecialchars($edit_data['details_images']); ?>">
                                 <?php endif; ?>
 
                                 <div class="mb-3">
@@ -216,11 +248,30 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Client</label>
+                                        <input type="text" name="client" class="form-control" value="<?php echo $edit_data ? htmlspecialchars($edit_data['client']) : ''; ?>">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Project Date</label>
+                                        <input type="date" name="project_date" class="form-control" value="<?php echo $edit_data ? htmlspecialchars($edit_data['project_date']) : ''; ?>">
+                                    </div>
+                                </div>
+
                                 <div class="mb-3">
-                                    <label class="form-label">Image</label>
-                                    <input type="file" name="image" class="form-control" accept="image/*" <?php echo $action === 'add' ? 'required' : ''; ?>>
-                                    <?php if ($edit_data && $edit_data['image']): ?>
-                                        <small class="text-muted">Current image: <?php echo htmlspecialchars($edit_data['image']); ?></small>
+                                    <label class="form-label">Thumbnail Image</label>
+                                    <input type="file" name="thumbnail" class="form-control" accept="image/*" <?php echo $action === 'add' ? 'required' : ''; ?>>
+                                    <?php if ($edit_data && $edit_data['thumbnail']): ?>
+                                        <small class="text-muted">Current thumbnail: <?php echo htmlspecialchars($edit_data['thumbnail']); ?></small>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Details Images (Multiple)</label>
+                                    <input type="file" name="details_images[]" class="form-control" accept="image/*" multiple>
+                                    <?php if ($edit_data && $edit_data['details_images']): ?>
+                                        <small class="text-muted">Current details images: <?php echo htmlspecialchars($edit_data['details_images']); ?></small>
                                     <?php endif; ?>
                                 </div>
 

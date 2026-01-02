@@ -84,7 +84,7 @@ $portfolio_q = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
 if ($portfolio_q && $portfolio_q->num_rows > 0) {
     while ($p = $portfolio_q->fetch_assoc()) {
         $catClass = 'filter-' . strtolower(preg_replace('/[^a-z0-9]+/i', '-', $p['category']));
-        $img = htmlspecialchars($p['image']);
+        $img = htmlspecialchars($p['thumbnail'] ?: $p['image']);
         $title = htmlspecialchars($p['title']);
         $desc = htmlspecialchars($p['description']);
         $pid = (int)$p['id'];

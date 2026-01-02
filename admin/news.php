@@ -51,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = 'News berhasil ditambahkan!';
     } elseif ($action === 'edit') {
         $id = $_POST['id'];
-        $imageSql = $uploadedImage ? "image='" . $uploadedImage . "', " : '';
-        $conn->query("UPDATE news SET title='$title', description='$description', " . ($imageSql ? $imageSql : '') . " 1=1 WHERE id=$id");
+        $imageSql = $uploadedImage ? ", image='" . $uploadedImage . "'" : '';
+        $conn->query("UPDATE news SET title='$title', description='$description'" . $imageSql . " WHERE id=$id");
         $message = 'News berhasil diubah!';
     }
     
@@ -87,7 +87,7 @@ $news_list = $conn->query("SELECT * FROM news ORDER BY created_at DESC");
             <!-- Sidebar -->
             <nav class="col-md-2 d-md-block bg-dark sidebar">
                 <div class="sidebar-header">
-                    <h5 class="text-white mb-4 mt-3">CA Admin</h5>
+                    <h5 class="text-white mb-4 mt-3">Admin</h5>
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item">

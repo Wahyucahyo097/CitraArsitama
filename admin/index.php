@@ -51,7 +51,7 @@ if ($result) {
             <!-- Sidebar -->
             <nav class="col-md-2 d-md-block bg-dark sidebar">
                 <div class="sidebar-header">
-                    <h5 class="text-white mb-4 mt-3">CA Admin</h5>
+                    <h5 class="text-white mb-4 mt-3">Admin</h5>
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item">

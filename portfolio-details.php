@@ -28,8 +28,11 @@ if (!$portfolio) {
 $title = htmlspecialchars($portfolio['title']);
 $category = htmlspecialchars($portfolio['category']);
 $desc = htmlspecialchars($portfolio['description']);
-$img = htmlspecialchars($portfolio['image']);
+$thumbnail = htmlspecialchars($portfolio['thumbnail'] ?? $portfolio['image']);
+$details_images = json_decode($portfolio['details_images'] ?? '[]', true);
 $link = htmlspecialchars($portfolio['link']);
+$client = htmlspecialchars($portfolio['client'] ?? 'Citra Arsitama');
+$project_date = htmlspecialchars($portfolio['project_date'] ?? date('Y-m-d'));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -123,21 +126,18 @@ $link = htmlspecialchars($portfolio['link']);
 
               <div class="swiper-wrapper align-items-center">
 
-                <div class="swiper-slide">
-                  <img src="assets/img/portfolio/<?php echo $img; ?>" alt="">
-                </div>
-
-                <div class="swiper-slide">
-                  <img src="assets/img/portfolio/<?php echo $img; ?>" alt="">
-                </div>
-
-                <div class="swiper-slide">
-                  <img src="assets/img/portfolio/<?php echo $img; ?>" alt="">
-                </div>
-
-                <div class="swiper-slide">
-                  <img src="assets/img/portfolio/<?php echo $img; ?>" alt="">
-                </div>
+                <?php
+                if (!empty($details_images)) {
+                    foreach ($details_images as $detail_img) {
+                        echo '<div class="swiper-slide"><img src="assets/img/portfolio/details/' . htmlspecialchars($detail_img) . '" alt=""></div>';
+                    }
+                } else {
+                    // Fallback to 4 slides with thumbnail
+                    for ($i = 0; $i < 4; $i++) {
+                        echo '<div class="swiper-slide"><img src="assets/img/portfolio/' . $thumbnail . '" alt=""></div>';
+                    }
+                }
+                ?>
 
               </div>
               <div class="swiper-pagination"></div>
@@ -149,8 +149,8 @@ $link = htmlspecialchars($portfolio['link']);
               <h3>Project information</h3>
               <ul>
                 <li><strong>Category</strong>: <?php echo $category; ?></li>
-                <li><strong>Client</strong>: Citra Arsitama</li>
-                <li><strong>Project date</strong>: <?php echo date('d M, Y'); ?></li>
+                <li><strong>Client</strong>: <?php echo $client; ?></li>
+                <li><strong>Project date</strong>: <?php echo date('d M, Y', strtotime($project_date)); ?></li>
                 <li><strong>Project URL</strong>: <a href="<?php echo $link; ?>" target="_blank"><?php echo $link; ?></a></li>
               </ul>
             </div>
