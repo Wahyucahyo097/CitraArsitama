@@ -148,7 +148,7 @@ $project_date = htmlspecialchars($portfolio['project_date'] ?? date('Y-m-d'));
             <div class="portfolio-info" data-aos="fade-up" data-aos-delay="200">
               <h3>Project information</h3>
               <ul>
-                <li><strong>Category</strong>: <?php echo $category; ?></li>
+                <li><strong>Tahun</strong>: <?php echo $category; ?></li>
                 <li><strong>Client</strong>: <?php echo $client; ?></li>
                 <li><strong>Project date</strong>: <?php echo date('d M, Y', strtotime($project_date)); ?></li>
                 <li><strong>Project URL</strong>: <a href="<?php echo $link; ?>" target="_blank"><?php echo $link; ?></a></li>

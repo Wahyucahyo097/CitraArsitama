@@ -182,7 +182,7 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
                                     <tr>
                                         <th>ID</th>
                                         <th>Title</th>
-                                        <th>Category</th>
+                                        <th>Tahun</th>
                                         <th>Thumbnail</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -192,7 +192,7 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
                                         <tr>
                                             <td><?php echo $row['id']; ?></td>
                                             <td><?php echo htmlspecialchars($row['title']); ?></td>
-                                            <td><span class="badge bg-secondary"><?php echo htmlspecialchars($row['category']); ?></span></td>
+                                            <td><?php echo htmlspecialchars($row['category']); ?></td>
                                             <td><?php echo $row['thumbnail'] ? '<img src="../assets/img/portfolio/' . htmlspecialchars($row['thumbnail']) . '" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">' : '-'; ?></td>
                                             <td>
                                                 <a href="portfolio.php?action=edit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">
@@ -233,14 +233,8 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Category</label>
-                                        <select name="category" class="form-control" required>
-                                            <option value="">-- Pilih Category --</option>
-                                            <option value="App" <?php echo $edit_data && $edit_data['category'] === 'App' ? 'selected' : ''; ?>>App</option>
-                                            <option value="Product" <?php echo $edit_data && $edit_data['category'] === 'Product' ? 'selected' : ''; ?>>Product</option>
-                                            <option value="Branding" <?php echo $edit_data && $edit_data['category'] === 'Branding' ? 'selected' : ''; ?>>Branding</option>
-                                            <option value="Books" <?php echo $edit_data && $edit_data['category'] === 'Books' ? 'selected' : ''; ?>>Books</option>
-                                        </select>
+                                        <label class="form-label">Tahun</label>
+                                        <input type="number" name="category" class="form-control" min="2000" max="2030" value="<?php echo $edit_data ? htmlspecialchars($edit_data['category']) : ''; ?>" required>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Link</label>

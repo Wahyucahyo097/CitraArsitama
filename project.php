@@ -70,10 +70,22 @@ include __DIR__ . '/admin/config.php';
 
           <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
             <li data-filter="*" class="filter-active">All</li>
-            <li data-filter=".filter-app">App</li>
-            <li data-filter=".filter-product">Product</li>
-            <li data-filter=".filter-branding">Branding</li>
-            <li data-filter=".filter-books">Books</li>
+<?php
+$categories_q = $conn->query("SELECT DISTINCT category FROM portfolio ORDER BY category DESC");
+if ($categories_q && $categories_q->num_rows > 0) {
+    while ($cat = $categories_q->fetch_assoc()) {
+        $cat_value = htmlspecialchars($cat['category']);
+        $filter_class = 'filter-' . strtolower($cat_value);
+        echo "<li data-filter=\".{$filter_class}\">{$cat_value}</li>\n";
+    }
+} else {
+    // fallback
+    echo "<li data-filter=\".filter-app\">App</li>\n";
+    echo "<li data-filter=\".filter-product\">Product</li>\n";
+    echo "<li data-filter=\".filter-branding\">Branding</li>\n";
+    echo "<li data-filter=\".filter-books\">Books</li>\n";
+}
+?>
           </ul><!-- End Portfolio Filters -->
 
           <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">

@@ -18,6 +18,7 @@ include __DIR__ . '/admin/config.php';
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -39,8 +40,7 @@ include __DIR__ . '/admin/config.php';
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
       <a href="index.php" class="logo d-flex align-items-center me-auto">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <img src="assets/img/company-logo.png" alt="">
+        <img src="assets/img/company-logo.png" alt="Company Logo">
         <h1 class="sitename">CV.Citra Arsitama</h1>
       </a>
 
@@ -61,7 +61,7 @@ include __DIR__ . '/admin/config.php';
   <main class="main">
 
     <!-- Hero Section (dynamic) -->
-    <section id="hero" class="hero section dark-background">
+    <section id="hero" class="hero section">
       <div class="hero-slideshow" data-aos="fade-in">
         <?php
         // load hero images from settings (JSON array)
@@ -140,53 +140,53 @@ if ($services_q && $services_q->num_rows > 0) {
 
 
     <!-- Clients Section -->
-    <!-- <section id="clients" class="clients section light-background">
+    <section id="clients" class="clients section light-background">
 
       <div class="container" data-aos="fade-up">
 
-        <div class="row gy-4"> -->
+        <div class="row gy-4">
 
 <?php
 // Try to load clients from DB; if none, fall back to existing static images
-// $clients_q = $conn->query("SELECT * FROM clients ORDER BY id ASC");
-// if ($clients_q && $clients_q->num_rows > 0) {
-//   while ($c = $clients_q->fetch_assoc()) {
-//     $img = htmlspecialchars($c['image']);
-//     if (!$img) continue;
-//     ?>
-<!-- //       <div class="col-xl-2 col-md-3 col-6 client-logo">
-//       <img src="assets/img/clients/<?php echo $img; ?>" class="img-fluid" alt="">
-//       </div>End Client Item -->
+$clients_q = $conn->query("SELECT * FROM clients ORDER BY id ASC");
+if ($clients_q && $clients_q->num_rows > 0) {
+  while ($c = $clients_q->fetch_assoc()) {
+    $img = htmlspecialchars($c['image']);
+    if (!$img) continue;
+    ?>
+      <div class="col-xl-2 col-md-3 col-6 client-logo">
+      <img src="assets/img/clients/<?php echo $img; ?>" class="img-fluid" alt="">
+      </div><!-- End Client Item -->
 
-//     <?php
-//   }
-// } else {
-//   // fallbacks (original static set)
-//   $static = [
-//     'assets/img/clients/client-2.png',
-//     'assets/img/clients/client-1.png',
-//     'assets/img/clients/client-3.png',
-//     'assets/img/clients/client-4.png',
-//     'assets/img/clients/client-5.png',
-//     'assets/img/clients/client-6.png',
-//   ];
-//   foreach ($static as $s) {
-//     ?>
-<!-- //       <div class="col-xl-2 col-md-3 col-6 client-logo">
-//       <img src="<?php echo $s; ?>" class="img-fluid" alt="">
-//       </div>End Client Item -->
+    <?php
+  }
+} else {
+  // fallbacks (original static set)
+  $static = [
+    'assets/img/clients/client-2.png',
+    'assets/img/clients/client-1.png',
+    'assets/img/clients/client-3.png',
+    'assets/img/clients/client-4.png',
+    'assets/img/clients/client-5.png',
+    'assets/img/clients/client-6.png',
+  ];
+  foreach ($static as $s) {
+    ?>
+      <div class="col-xl-2 col-md-3 col-6 client-logo">
+      <img src="<?php echo $s; ?>" class="img-fluid" alt="">
+      </div><!-- End Client Item -->
 
-<!-- //     -->
- <?php
-//   }
-// }
+    <?php
+  }
+}
 ?>
 
         </div>
 
       </div>
 
-    </section><!-- /Clients Section -->
+    </section>
+    <!-- /Clients Section -->
 
 
 
@@ -197,10 +197,22 @@ if ($services_q && $services_q->num_rows > 0) {
 
           <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
             <li data-filter="*" class="filter-active">All</li>
-            <li data-filter=".filter-app">App</li>
-            <li data-filter=".filter-product">Product</li>
-            <li data-filter=".filter-branding">Branding</li>
-            <li data-filter=".filter-books">Books</li>
+<?php
+$categories_q = $conn->query("SELECT DISTINCT category FROM portfolio ORDER BY category DESC");
+if ($categories_q && $categories_q->num_rows > 0) {
+    while ($cat = $categories_q->fetch_assoc()) {
+        $cat_value = htmlspecialchars($cat['category']);
+        $filter_class = 'filter-' . strtolower($cat_value);
+        echo "<li data-filter=\".{$filter_class}\">{$cat_value}</li>\n";
+    }
+} else {
+    // fallback
+    echo "<li data-filter=\".filter-app\">App</li>\n";
+    echo "<li data-filter=\".filter-product\">Product</li>\n";
+    echo "<li data-filter=\".filter-branding\">Branding</li>\n";
+    echo "<li data-filter=\".filter-books\">Books</li>\n";
+}
+?>
           </ul><!-- End Portfolio Filters -->
 
           <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">

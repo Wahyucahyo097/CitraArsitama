@@ -71,7 +71,7 @@ if ($result && $result->num_rows > 0) {
         <ul>
           <li><a href="project.php">Project</a></li>
           <li><a href="about.php" class="active">About</a></li>
-          <li><a href="news.html">News</a></li>
+          <li><a href="news.php">News</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
