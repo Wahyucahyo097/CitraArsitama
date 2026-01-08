@@ -126,7 +126,7 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
                 <ul class="nav flex-column">
                     <li class="nav-item"><a class="nav-link" href="index.php"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="portfolio.php"><i class="bi bi-images"></i> Portfolio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="services.php"><i class="bi bi-gear"></i> Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.php"><i class="bi bi-gear"></i> Menu Layanan</a></li>
                     <li class="nav-item"><a class="nav-link" href="team.php"><i class="bi bi-people"></i> Team</a></li>
                     <li class="nav-item"><a class="nav-link" href="clients.php"><i class="bi bi-building"></i> Clients</a></li>
                      <li class="nav-item"><a class="nav-link" href="news.php"><i class="bi bi-newspaper"></i> News</a></li>

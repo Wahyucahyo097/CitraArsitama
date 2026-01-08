@@ -54,7 +54,173 @@ if ($result && $result->num_rows > 0) {
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
+<style>
+    .sbu-poster-container {
+      font-family: 'Roboto', sans-serif;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .sbu-title { text-align: center; color: #003366; margin-bottom: 25px; border-bottom: 3px solid #0056b3; padding-bottom: 15px; }
+    .sbu-title h2 { font-weight: 700; text-transform: uppercase; margin: 0; }
+    .responsive-blue-table { width: 100%; border-collapse: collapse; background-color: #fff; }
+    .responsive-blue-table thead tr { background-color: #0056b3; color: #ffffff; }
+    .responsive-blue-table th, .responsive-blue-table td { padding: 12px 15px; border: 1px solid #dee2e6; text-align: left; }
+    .responsive-blue-table tbody tr:nth-child(even) { background-color: #f8f9fa; }
+    
+    @media screen and (max-width: 768px) {
+      .responsive-blue-table thead { display: none; }
+      .responsive-blue-table tr { display: block; margin-bottom: 15px; border: 1px solid #0056b3; }
+      .responsive-blue-table td { display: block; text-align: right; padding-left: 50%; position: relative; border-bottom: 1px solid #eee; }
+      .responsive-blue-table td::before { content: attr(data-label); position: absolute; left: 10px; font-weight: bold; color: #0056b3; }
+    }
 
+    .company-data-wrapper {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #0056b3;
+    margin-top: 40px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .data-header {
+  background: #003366; /* Biru Gelap */
+  padding: 25px;
+  text-align: center;
+}
+
+.data-header h3 {
+  color: #ffffff !important; /* Memastikan tulisan warna putih */
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin: 0;
+  font-size: 1.5rem;
+  /* Memberikan bayangan halus agar teks lebih tajam */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+}
+  .data-body {
+    padding: 30px;
+  }
+
+  .data-row {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+  }
+
+  .data-row:last-child { border-bottom: none; }
+
+  .data-label {
+    flex: 0 0 35%;
+    font-weight: 700;
+    color: #0056b3;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+  }
+
+  .data-value {
+    flex: 1;
+    color: #333;
+    font-size: 1rem;
+  }
+
+  .sub-section-title {
+    background: #eef6fc;
+    padding: 8px 15px;
+    margin: 20px 0 10px 0;
+    font-weight: bold;
+    color: #003366;
+    border-left: 4px solid #0056b3;
+  }
+
+  @media (max-width: 768px) {
+    .data-row { flex-direction: column; }
+    .data-label { margin-bottom: 5px; }
+  }
+
+  /* Container Utama Bagan */
+  .org-chart-container {
+    padding: 50px 20px;
+    background: #fdfdfd;
+    text-align: center;
+    overflow-x: auto; /* Agar bisa di-scroll jika layar kekecilan */
+  }
+
+  .org-chart-title {
+    background: #003366;
+    color: white;
+    padding: 15px;
+    display: inline-block;
+    font-weight: bold;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    border-radius: 5px;
+  }
+
+  /* Struktur Level */
+  .org-level {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  /* Kotak Anggota */
+  .org-node {
+    background: #4a86e8; /* Biru sesuai gambar */
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    min-width: 200px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border: 2px dashed #ffffff; /* Garis putus-putus sesuai gambar */
+    margin: 0 10px;
+  }
+
+  .org-node .role {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .org-node .name {
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  /* Garis Penghubung Sederhana (Vertical) */
+  .line-v {
+    width: 2px;
+    height: 30px;
+    background: #333;
+    margin: 0 auto;
+  }
+
+  /* Khusus Grid Tenaga Ahli (Bagian Bawah) */
+  .expert-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 992px) {
+    .expert-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 576px) {
+    .expert-grid { grid-template-columns: 1fr; }
+  }
+  </style>
 </head>
 
 <body class="about-page">
@@ -70,7 +236,59 @@ if ($result && $result->num_rows > 0) {
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="project.php">Project</a></li>
-          <li><a href="about.php" class="active">About</a></li>
+  
+  <li class="dropdown">
+    <a href="about.php" class="active">
+      <span>About</span> 
+      <i class="bi bi-chevron-down toggle-dropdown"></i>
+    </a>
+    <ul>
+      <li><a href="about.php#company-data">Identitas Perusahaan</a></li>
+      <li><a href="about.php#team">Susunan Organisasi</a></li>
+      <li><a href="about.php#tenaga-ahli">Daftar Tenaga Ahli</a></li> <li class="dropdown">
+      <li class="dropdown">
+        <a href="#"><span>Legalitas Perusahaan</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+        <ul>
+          <li><a href="about.php#sbu">SBU Konstruksi</a></li>
+          <li><a href="about.php#sbu-non-kon">SBU Non-Konstruksi</a></li> 
+        </ul>
+      </li>
+    </ul>
+  </li>
+         <li class="dropdown">
+  <a href="#">
+    <span>Layanan</span>
+    <i class="bi bi-chevron-down toggle-dropdown"></i>
+  </a>
+  <ul>
+    <?php
+    // Function to build menu recursively
+    function build_menu($parent_id = 0) {
+        global $conn;
+        $menu_q = $conn->query("SELECT * FROM menu WHERE parent_id = $parent_id ORDER BY order_by ASC");
+        $output = '';
+        while ($menu = $menu_q->fetch_assoc()) {
+            $has_children = $conn->query("SELECT COUNT(*) as count FROM menu WHERE parent_id = {$menu['id']}")->fetch_assoc()['count'] > 0;
+            if ($has_children) {
+                $output .= '<li class="dropdown">';
+                $output .= '<a href="' . htmlspecialchars($menu['url']) . '">';
+                $output .= '<span>' . htmlspecialchars($menu['title']) . '</span>';
+                $output .= '<i class="bi bi-chevron-down toggle-dropdown"></i>';
+                $output .= '</a>';
+                $output .= '<ul>';
+                $output .= build_menu($menu['id']);
+                $output .= '</ul>';
+                $output .= '</li>';
+            } else {
+                $output .= '<li><a href="' . htmlspecialchars($menu['url']) . '">' . htmlspecialchars($menu['title']) . '</a></li>';
+            }
+        }
+        return $output;
+    }
+    echo build_menu();
+    ?>
+  </ul>
+</li>
           <li><a href="news.php">News</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -92,6 +310,73 @@ if ($result && $result->num_rows > 0) {
 
 
     <!-- Team Section -->
+    </section><!-- /Team Section -->
+    <section id="company-data" class="company-data section" style="padding-top: 0;">
+      <div class="container" data-aos="fade-up">
+        <div class="company-data-wrapper">
+          <div class="data-header">
+            <h3 class="m-0">Informasi Identitas Perusahaan</h3>
+          </div>
+          
+          <div class="data-body">
+            <div class="data-row">
+              <div class="data-label">Nama Perusahaan</div>
+              <div class="data-value"><strong>CV. CITRA ARSITAMA</strong></div>
+            </div>
+            <div class="data-row">
+              <div class="data-label">Bidang Usaha</div>
+              <div class="data-value">Jasa Konsultasi Teknik</div>
+            </div>
+
+            <div class="sub-section-title">Akte Pendirian Perusahaan</div>
+            <div class="data-row">
+              <div class="data-label">Nomor / Tanggal</div>
+              <div class="data-value">01 / 7 Januari 2005</div>
+            </div>
+            <div class="data-row">
+              <div class="data-label">Notaris</div>
+              <div class="data-value">R.M. Soetomo Soeprapto, SH.</div>
+            </div>
+
+            <div class="sub-section-title">Akte Perubahan Terakhir</div>
+            <div class="data-row">
+              <div class="data-label">Nomor / Tanggal</div>
+              <div class="data-value">68 / 20 Nopember 2013</div>
+            </div>
+            <div class="data-row">
+              <div class="data-label">Notaris</div>
+              <div class="data-value">Sugiharto, SH.</div>
+            </div>
+
+            <div class="sub-section-title">Perizinan Berusaha Berbasis Risiko</div>
+            <div class="data-row">
+              <div class="data-label">NIB (Nomor Induk Berusaha)</div>
+              <div class="data-value">0220106510565</div>
+            </div>
+            <div class="data-row">
+              <div class="data-label">NPWP</div>
+              <div class="data-value">02.299.655.7-532.000</div>
+            </div>
+            
+            
+            <div class="sub-section-title">Informasi Perbankan</div>
+            <div class="data-row">
+              <div class="data-label">Bank</div>
+              <div class="data-value">BPD BANK JATENG CABANG KOORDINATOR SEMARANG</div>
+            </div>
+            <div class="data-row">
+              <div class="data-label">No. Rekening</div>
+              <div class="data-value">1-021-01451-2</div>
+            </div>
+            <div class="data-row">
+              <div class="data-label">Keanggotaan</div>
+              <div class="data-value">INKINDO (DPD JAWA TENGAH) : 12427/P/0577.JT</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
     <section id="team" class="team section light-background">
 
       <!-- Section Title -->
@@ -192,24 +477,545 @@ if ($team_result && $team_result->num_rows > 0) {
 
       </div>
 
-    </section><!-- /Team Section -->
+<section class="org-chart-container">
+  <div class="org-level">
+    <div class="org-node" style="background: #2a5699;">
+      <div class="role">Direktur</div>
+      <div class="name">Rohman Eko Santoso, ST. M.Ars</div>
+    </div>
+  </div>
+
+  <div class="org-level">
+    <div class="org-node">
+      <div class="role">Keuangan</div>
+      <div class="name">Puput Fitria Setyawati, Amd.</div>
+    </div>
+    <div class="org-node">
+      <div class="role">Administrasi</div>
+      <div class="name">Ahmad Wahyudi</div>
+    </div>
+  </div>
+
+  <div class="org-level">
+    <div class="org-node" style="background: #3c78d8;">
+      <div class="role">Bagian Teknik & Operasional (Sipil)</div>
+      <div class="name">Sudiyoko, ST.</div>
+    </div>
+    <div class="org-node" style="background: #3c78d8;">
+      <div class="role">Bagian Teknik & Operasional (Arsitektur)</div>
+      <div class="name">Anjar Saptoyogo, ST.</div>
+    </div>
+  </div>
+
+  <p><strong>TENAGA AHLI</strong></p>
+
+  <div class="expert-grid">
+    <div class="org-node">
+      <div class="role">Ahli Sipil</div>
+      <div class="name">Muhammadun, ST. MT</div>
+    </div>
+    <div class="org-node">
+      <div class="role">Ahli M.E.P</div>
+      <div class="name">Bayu Pradana, ST. MT</div>
+    </div>
+    <div class="org-node">
+      <div class="role">Ahli Planologi</div>
+      <div class="name">Fajar Nugroho, ST.</div>
+    </div>
+    <div class="org-node">
+      <div class="role">Ahli Arsitektur</div>
+      <div class="name">Ronny AB Wardhana, ST. MT</div>
+    </div>
+    
+    <div class="org-node">
+      <div class="role">Ahli Sipil</div>
+      <div class="name">Mela Fitri Astuti, ST</div>
+    </div>
+    <div class="org-node" style="visibility: hidden;"></div> <div class="org-node">
+      <div class="role">Ahli Planologi</div>
+      <div class="name">Febri Dwi Astuti, S.Pwk</div>
+    </div>
+    <div class="org-node">
+      <div class="role">Ahli Arsitektur</div>
+      <div class="name">Bagas Harda Prastya, S.Ars</div>
+    </div>
+  </div>
+</section>
+
+    <section id="sbu" class="sbu section">
+      <div class="container" data-aos="fade-up">
+        <div class="sbu-poster-container">
+          <div class="sbu-title">
+            <h2>Legalitas Perusahaan</h2>
+            <p>Sertifikat Badan Usaha Jasa Konsultan Perencana Konstruksi</p>
+          </div>
+          <table class="responsive-blue-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Kualifikasi</th>
+                <th>Kode</th>
+                <th>Sifat</th>
+                <th>KBLI</th>
+                <th>Subklasifikasi</th>
+                <th>Registrasi LPJK</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="No">1</td>
+                <td data-label="Kualifikasi">Kecil</td>
+                <td data-label="Kode">AR001</td>
+                <td data-label="Sifat">Umum</td>
+                <td data-label="KBLI">71101 - Aktivitas Arsitektur</td>
+                <td data-label="Subklasifikasi">Jasa Arsitektural Bangunan Gedung Hunian dan Non Hunian</td>
+                <td data-label="Registrasi">F.3.01.AR.K.02.2023.0053522</td>
+              </tr>
+              <tr>
+                <td data-label="No">2</td>
+                <td data-label="Kualifikasi">Kecil</td>
+                <td data-label="Kode">AR002</td>
+                <td data-label="Sifat">Umum</td>
+                <td data-label="KBLI">71101 - Aktivitas Arsitektur</td>
+                <td data-label="Subklasifikasi">Jasa Arsitektural Lainnya</td>
+                <td data-label="Registrasi">F.3.01.AR.K.02.2023.0053522</td>
+              </tr>
+              <tr>
+                <td data-label="No">3</td>
+                <td data-label="Kualifikasi">Kecil</td>
+                <td data-label="Kode">RK002</td>
+                <td data-label="Sifat">Umum</td>
+                <td data-label="KBLI">71102 - Aktivitas Keinsinyuran dan Konsultasi Teknis YBDI</td>
+                <td data-label="Subklasifikasi">Jasa Rekayasa Pekerjaan TeknikSipil Sumber Daya Air</td>
+                <td data-label="Registrasi">F.3.01.RK.K.02.2023.0053522</td>
+              </tr>
+              <tr>
+                <td data-label="No">4</td>
+                <td data-label="Kualifikasi">Kecil</td>
+                <td data-label="Kode">AL002</td>
+                <td data-label="Sifat">Umum</td>
+                <td data-label="KBLI">71101 - Aktivitas Arsitektur</td>
+                <td data-label="Subklasifikasi">Jasa Pengembangan Wilayah</td>
+                <td data-label="Registrasi">F.3.01.AL.K.02.2023.0053522</td>
+              </tr>
+              <tr>
+                <td data-label="No">5</td>
+                <td data-label="Kualifikasi">Kecil</td>
+                <td data-label="Kode">AL003</td>
+                <td data-label="Sifat">Umum</td>
+                <td data-label="KBLI">71101 - Aktivitas Arsitektur</td>
+                <td data-label="Subklasifikasi">Jasa Pengembangan Perkotaan</td>
+                <td data-label="Registrasi">F.3.01.AL.K.02.2023.0053522</td>
+              </tr>
+              <tr>
+                <td data-label="No">6</td>
+                <td data-label="Kualifikasi">Kecil</td>
+                <td data-label="Kode">AL004</td>
+                <td data-label="Sifat">Umum</td>
+                <td data-label="KBLI">71101 - Aktivitas Arsitektur</td>
+                <td data-label="Subklasifikasi">Jasa PengembanganLingkungan Bangunan dan Lanskap</td>
+                <td data-label="Registrasi">F.3.01.AL.K.02.2023.0053522</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="sbu-non-kon" class="sbu section" style="padding-top: 0;">
+      <div class="container" data-aos="fade-up">
+        <div class="sbu-poster-container">
+          <div class="sbu-title">
+            <h2>Legalitas Perusahaan</h2>
+            <p>Sertifikat Badan Usaha Jasa Konsultan Perencana Non-Konstruksi</p>
+          </div>
+          <table class="responsive-blue-table">
+            <thead>
+              <tr>
+                <th style="width: 8%;">No</th>
+                <th style="width: 70%;">Sub Layanan / Bidang Pekerjaan</th>
+                <th style="width: 22%;">Kode</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-category">
+                <td data-label="No">1</td>
+                <td data-label="Sub Layanan">TRANSPORTASI</td>
+                <td data-label="Kode">1.02</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Pengembangan Sarana Transportasi</td>
+                <td data-label="Kode">1.02.01</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Legislasi/Peraturan Bidang Transportasi</td>
+                <td data-label="Kode">1.02.02</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Usaha Jasa Angkutan</td>
+                <td data-label="Kode">1.02.03</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Penyusun Dokumen Analisis Dampak Lalu Lintas</td>
+                <td data-label="Kode">1.02.04</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Sub-bidang Transportasi Lainnya</td>
+                <td data-label="Kode">1.02.99</td>
+              </tr>
+
+              <tr class="row-category">
+                <td data-label="No">2</td>
+                <td data-label="Sub Layanan">JASA SURVEY</td>
+                <td data-label="Kode">1.SS</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Survey Teristris</td>
+                <td data-label="Kode">1.SS.01</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Penginderaan Jauh / Fotogrametri</td>
+                <td data-label="Kode">1.SS.02</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Survey Hidrografi / Batimetri</td>
+                <td data-label="Kode">1.SS.03</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Sistem Informasi Geografi</td>
+                <td data-label="Kode">1.SS.04</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Survey Registrasi Kepemilikan Tanah / Kadastral</td>
+                <td data-label="Kode">1.SS.05</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Survey Geologi dan Geofisika</td>
+                <td data-label="Kode">1.SS.06</td>
+              </tr>
+               <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Survey Pertanian</td>
+                <td data-label="Kode">1.SS.07</td>
+              </tr>
+               <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Jasa Survey non Seismik</td>
+                <td data-label="Kode">1.SS.08</td>
+              </tr>
+               <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Jasa Survey Geologi dan Geofisika (non seismik)</td>
+                <td data-label="Kode">1.SS.09</td>
+              </tr>
+
+              <tr class="row-category">
+                <td data-label="No">3</td>
+                <td data-label="Sub Layanan">JASA STUDI, PENELITIAN & BANTUAN TEKNIK</td>
+                <td data-label="Kode">1.SI</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Studi Makro</td>
+                <td data-label="Kode">1.SI.01</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Studi Kelayakan & Studi Mikro Lainnya</td>
+                <td data-label="Kode">1.SI.02</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Studi Perencanaan Umum</td>
+                <td data-label="Kode">1.SI.03</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Jasa Penelitian</td>
+                <td data-label="Kode">1.SI.04</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Jasa Bantuan Teknik</td>
+                <td data-label="Kode">1.SI.05</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Jasa Penelitian dan Pengembangan Minyak dan Gas Bumi</td>
+                <td data-label="Kode">1.SI.06</td>
+              </tr>
+
+              <tr class="row-category">
+                <td data-label="No">4</td>
+                <td data-label="Sub Layanan">JASA KONSULTANSI MANAJEMEN</td>
+                <td data-label="Kode">1.MS</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Perencanaan Sistem Akuntansi</td>
+                <td data-label="Kode">1.MS.01</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Pelatihan dan Pengembangan SDM</td>
+                <td data-label="Kode">1.MS.02</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Konsultasi Manajemen Fungsional</td>
+                <td data-label="Kode">1.MS.03</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Konsultasi Hukum Bisnis</td>
+                <td data-label="Kode">1.MS.04</td>
+              </tr>
+
+              <tr class="row-category">
+                <td data-label="No">5 </td>
+                <td data-label="Sub Layanan">JASA KONSULTANSI DESTINASI PARIWISATA</td>
+                <td data-label="Kode">4.01</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Pemberdayaan Masyarakat</td>
+                <td data-label="Kode">4.01.01</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Pembangunan Prasarana</td>
+                <td data-label="Kode">4.01.03</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Penyediaan  &  Pembangunan  Fasilitas / Sarana Pariwisata</td>
+                <td data-label="Kode">4.01.04</td>
+              </tr>
+
+              <tr class="row-category">
+                <td data-label="No">6</td>
+                <td data-label="Sub Layanan">JASA KONSULTASI PERENCANAAN KEPARIWISATAAN</td>
+                <td data-label="Kode">4.SR</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Jasa Perencanaan Umum & Konsultansi Pembangunan/ Pengembangan</td>
+                <td data-label="Kode">4.SR.01</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Jasa Rancang Bangun dan  Bantuan Teknik</td>
+                <td data-label="Kode">4.SR.02</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Jasa Perencanaan Sistem Akuntansi dan Keuangan</td>
+                <td data-label="Kode">4.SR.03</td>
+              </tr>
+               <tr>
+                <td>&nbsp;</td>
+                <td data-label="Detail">Jasa Perencanaan Informasi Teknologi</td>
+                <td data-label="Kode">4.SR.04</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tenaga-ahli" class="tenaga-ahli section">
+       <section id="sbu-non-kon" class="sbu section" style="padding-top: 0;">
+      <div class="container" data-aos="fade-up">
+        <div class="sbu-poster-container">
+          <div class="sbu-title">
+            <h2>DAFTAR TENAGA AHLI</h2>
+            <p>CV. CITRA ARSITAMA</p>
+          </div>
+      <table class="responsive-blue-table">
+        <thead>
+          <tr>
+            <th style="width: 5%;">NO</th>
+            <th style="width: 20%;">NAMA</th>
+            <th style="width: 35%;">PENDIDIKAN</th>
+            <th style="width: 15%;">TAHUN LULUS</th>
+            <th style="width: 25%;">KEAHLIAN</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="No">1</td>
+            <td data-label="Nama"><strong>Rohman Eko Santoso, ST. M.Ars</strong></td>
+            <td data-label="Pendidikan">S1 Arsitektur UNIKOM <br> S2 Arsitektur UNDIP</td>
+            <td data-label="Tahun Lulus">2005 <br> 2020</td>
+            <td data-label="Keahlian">Arsitektur</td>
+          </tr>
+          <tr>
+            <td data-label="No">2</td>
+            <td data-label="Nama"><strong>Sus Andjasmara Kurmani, ST.</strong></td>
+            <td data-label="Pendidikan">S1 Arsitektur UNIKA Soegijapranata</td>
+            <td data-label="Tahun Lulus">1995</td>
+            <td data-label="Keahlian">Arsitektur</td>
+          </tr>
+          <tr>
+            <td data-label="No">3</td>
+            <td data-label="Nama"><strong>Ronny AB Wardhana, ST, MT</strong></td>
+            <td data-label="Pendidikan">S1 Arsitektur UNIKA Soegijapranata <br> S2 Arsitektur UNDIP</td>
+            <td data-label="Tahun Lulus">1995 <br> 1999</td>
+            <td data-label="Keahlian">Arsitektur</td>
+          </tr>
+          <tr>
+            <td data-label="No">4</td>
+            <td data-label="Nama"><strong>Ktut Christy S, ST.</strong></td>
+            <td data-label="Pendidikan">S1 Arsitektur UNDIP</td>
+            <td data-label="Tahun Lulus">2008</td>
+            <td data-label="Keahlian">Arsitektur</td>
+          </tr>
+          <tr>
+            <td data-label="No">5</td>
+            <td data-label="Nama"><strong>Anjar Saptoyogo, ST.</strong></td>
+            <td data-label="Pendidikan">S1 Arsitektur UNNES</td>
+            <td data-label="Tahun Lulus">2008</td>
+            <td data-label="Keahlian">Arsitektur</td>
+          </tr>
+          <tr>
+            <td data-label="No">6</td>
+            <td data-label="Nama"><strong>Ria Ripardi Wahyu Lestari, S.Ars.</strong></td>
+            <td data-label="Pendidikan">S1 Arsitektur UNIKA Soegijapranata</td>
+            <td data-label="Tahun Lulus">2016</td>
+            <td data-label="Keahlian">Arsitektur</td>
+          </tr>
+          <tr>
+            <td data-label="No">7</td>
+            <td data-label="Nama"><strong>Bagas Harda Prasetyo, S.Ars.</strong></td>
+            <td data-label="Pendidikan">S1 Arsitektur UNIKA Soegijapranata</td>
+            <td data-label="Tahun Lulus">2017</td>
+            <td data-label="Keahlian">Arsitektur</td>
+          </tr>
+          <tr>
+            <td data-label="No">8</td>
+            <td data-label="Nama"><strong>Dwi Guntoro, ST, MT</strong></td>
+            <td data-label="Pendidikan">S1 Sipil USM <br> S2 MTPK UNDIP</td>
+            <td data-label="Tahun Lulus">1999 <br> 2004</td>
+            <td data-label="Keahlian">Sipil</td>
+          </tr>
+          <tr>
+            <td data-label="No">9</td>
+            <td data-label="Nama"><strong>Muhammadun, ST, MT</strong></td>
+            <td data-label="Pendidikan">S1 Sipil UNISSULA <br> S2 Sipil UNISSULA</td>
+            <td data-label="Tahun Lulus">1994 <br> 2009</td>
+            <td data-label="Keahlian">Sipil</td>
+          </tr>
+          <tr>
+            <td data-label="No">10</td>
+            <td data-label="Nama"><strong>Sudiyoko, ST</strong></td>
+            <td data-label="Pendidikan">S1 Sipil UNTAG 1945</td>
+            <td data-label="Tahun Lulus">1998</td>
+            <td data-label="Keahlian">Sipil</td>
+          </tr>
+          <tr>
+            <td data-label="No">11</td>
+            <td data-label="Nama"><strong>Wahyu Bagus H, ST</strong></td>
+            <td data-label="Pendidikan">S1 Sipil UNDIP</td>
+            <td data-label="Tahun Lulus">1998</td>
+            <td data-label="Keahlian">Sipil</td>
+          </tr>
+          <tr>
+            <td data-label="No">12</td>
+            <td data-label="Nama"><strong>Mela Fitri Astuti, ST.</strong></td>
+            <td data-label="Pendidikan">S1 Sipil UNTAG 1945</td>
+            <td data-label="Tahun Lulus">2017</td>
+            <td data-label="Keahlian">Sipil</td>
+          </tr>
+          <tr>
+            <td data-label="No">13</td>
+            <td data-label="Nama"><strong>Bayu Pradana, ST, MT</strong></td>
+            <td data-label="Pendidikan">S1 T. Elektro USM <br> S2 M. Elektro UNDIP</td>
+            <td data-label="Tahun Lulus">2017 <br> 2021</td>
+            <td data-label="Keahlian">Mechanical Electrical Plumbing</td>
+          </tr>
+          <tr>
+            <td data-label="No">14</td>
+            <td data-label="Nama"><strong>Sigit Nurmansyah, S.Si</strong></td>
+            <td data-label="Pendidikan">S1 Elektronika & Instrumensi UGM</td>
+            <td data-label="Tahun Lulus">2012</td>
+            <td data-label="Keahlian">Mechanical Electrical Plumbing</td>
+          </tr>
+          <tr>
+            <td data-label="No">15</td>
+            <td data-label="Nama"><strong>Fajar Nugroho, ST.</strong></td>
+            <td data-label="Pendidikan">S1 Planologi Universitas Sultan Agung</td>
+            <td data-label="Tahun Lulus">2017</td>
+            <td data-label="Keahlian">Planologi</td>
+          </tr>
+          <tr>
+            <td data-label="No">16</td>
+            <td data-label="Nama"><strong>Farida Hidayah, S.PWK</strong></td>
+            <td data-label="Pendidikan">S1 Planologi Universitas Sultan Agung</td>
+            <td data-label="Tahun Lulus">2018</td>
+            <td data-label="Keahlian">Planologi</td>
+          </tr>
+          <tr>
+            <td data-label="No">17</td>
+            <td data-label="Nama"><strong>Rachmanesvi Ulfa, S.PWK</strong></td>
+            <td data-label="Pendidikan">S1 Planologi Universitas Sultan Agung</td>
+            <td data-label="Tahun Lulus">2018</td>
+            <td data-label="Keahlian">Planologi</td>
+          </tr>
+          <tr>
+            <td data-label="No">18</td>
+            <td data-label="Nama"><strong>Febri Dwi Astuti, S.PWK</strong></td>
+            <td data-label="Pendidikan">S1 Planologi Universitas Sultan Agung</td>
+            <td data-label="Tahun Lulus">2019</td>
+            <td data-label="Keahlian">Planologi</td>
+          </tr>
+           <tr>
+            <td data-label="No">19</td>
+            <td data-label="Nama"><strong>Puput Fitria Setyawati, Amd.</strong></td>
+            <td data-label="Pendidikan">D3 Ilmu Komunikasi Universitas Diponegoro</td>
+            <td data-label="Tahun Lulus">2005</td>
+            <td data-label="Keahlian">Pemberdayaan</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
   </main>
 
-  <footer class="footer-simple py-4" style="background-color: #f8f8f8; border-top: 1px solid #eee;">
-    <div class="container text-center">
+<footer class="footer-simple py-4" style="background-color: #f8f8f8; border-top: 1px solid #eee;">
+  <div class="container position-relative">
 
-      <p class="mb-2" style="color: #333;">Copyright © 2025 Citra Arsitama. All right reserved.</p>
+    <p class="mb-2 text-center" style="color: #333;">
+      Copyright © 2025 Citra Arsitama. All right reserved.
+    </p>
 
-      <div class="footer-social" style="display: flex; justify-content: center; gap: 14px; font-size: 1.25rem;">
-        <a href="#" style="text-decoration: none;"><i class="bi bi-facebook"></i></a>
-        <a href="https://www.instagram.com/studio_citraarsitama?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" style="text-decoration: none;"><i class="bi bi-instagram"></i></a>
-        <a href="#" style="text-decoration: none;"><i class="bi bi-linkedin"></i></a>
-        <a href="#" style="text-decoration: none;"><i class="bi bi-youtube"></i></a>
-      </div>
-
+    <div class="footer-social text-center mb-3"
+         style="display: flex; justify-content: center; gap: 14px; font-size: 1.25rem;">
+      <a href="#"><i class="bi bi-facebook"></i></a>
+      <a href="https://www.instagram.com/studio_citraarsitama"><i class="bi bi-instagram"></i></a>
+      <a href="#"><i class="bi bi-linkedin"></i></a>
+      <a href="#"><i class="bi bi-youtube"></i></a>
     </div>
-  </footer>
+
+    <!-- Gambar kanan bawah footer -->
+    <div class="footer-image">
+      <img src="assets/img/footer.png" alt="Footer Image">
+    </div>
+
+  </div>
+</footer>
 
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

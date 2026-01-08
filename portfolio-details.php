@@ -77,9 +77,62 @@ $project_date = htmlspecialchars($portfolio['project_date'] ?? date('Y-m-d'));
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="project.php" class="active">Project</a></li>
-          <li><a href="about.php">About</a></li>
-          <li><a href="news.html">News</a></li>
+       <li><a href="project.php">Project</a></li>
+  
+  <li class="dropdown">
+    <a href="about.php" class="active">
+      <span>About</span> 
+      <i class="bi bi-chevron-down toggle-dropdown"></i>
+    </a>
+    <ul>
+      <li><a href="about.php#company-data">Identitas Perusahaan</a></li>
+      <li><a href="about.php#team">Susunan Organisasi</a></li>
+      <li><a href="about.php#tenaga-ahli">Daftar Tenaga Ahli</a></li> <li class="dropdown">
+      <li class="dropdown">
+        <a href="#"><span>Legalitas Perusahaan</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+        <ul>
+          <li><a href="about.php#sbu">SBU Konstruksi</a></li>
+          <li><a href="about.php#sbu-non-kon">SBU Non-Konstruksi</a></li> 
+        </ul>
+      </li>
+    </ul>
+  </li>
+
+         <li class="dropdown">
+  <a href="#">
+    <span>Layanan</span>
+    <i class="bi bi-chevron-down toggle-dropdown"></i>
+  </a>
+  <ul>
+    <?php
+    // Function to build menu recursively
+    function build_menu($parent_id = 0) {
+        global $conn;
+        $menu_q = $conn->query("SELECT * FROM menu WHERE parent_id = $parent_id ORDER BY order_by ASC");
+        $output = '';
+        while ($menu = $menu_q->fetch_assoc()) {
+            $has_children = $conn->query("SELECT COUNT(*) as count FROM menu WHERE parent_id = {$menu['id']}")->fetch_assoc()['count'] > 0;
+            if ($has_children) {
+                $output .= '<li class="dropdown">';
+                $output .= '<a href="' . htmlspecialchars($menu['url']) . '">';
+                $output .= '<span>' . htmlspecialchars($menu['title']) . '</span>';
+                $output .= '<i class="bi bi-chevron-down toggle-dropdown"></i>';
+                $output .= '</a>';
+                $output .= '<ul>';
+                $output .= build_menu($menu['id']);
+                $output .= '</ul>';
+                $output .= '</li>';
+            } else {
+                $output .= '<li><a href="' . htmlspecialchars($menu['url']) . '">' . htmlspecialchars($menu['title']) . '</a></li>';
+            }
+        }
+        return $output;
+    }
+    echo build_menu();
+    ?>
+  </ul>
+</li>
+          <li><a href="news.php">News</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>

@@ -102,7 +102,7 @@ $news_list = $conn->query("SELECT * FROM news ORDER BY created_at DESC");
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="services.php">
-                            <i class="bi bi-gear"></i> Services
+                            <i class="bi bi-gear"></i> Menu Layanan
                         </a>
                     </li>
                     <li class="nav-item">

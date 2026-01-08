@@ -5,7 +5,7 @@ check_login();
 
 // Count data from database
 $portfolio_count = 0;
-$services_count = 0;
+$menu_count = 0;
 $team_count = 0;
 $news_count = 0;
 
@@ -15,10 +15,10 @@ if ($result) {
     $portfolio_count = $row['count'];
 }
 
-$result = $conn->query("SELECT COUNT(*) as count FROM services");
+$result = $conn->query("SELECT COUNT(*) as count FROM menu");
 if ($result) {
     $row = $result->fetch_assoc();
-    $services_count = $row['count'];
+    $menu_count = $row['count'];
 }
 
 $result = $conn->query("SELECT COUNT(*) as count FROM team");
@@ -66,7 +66,7 @@ if ($result) {
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="services.php">
-                            <i class="bi bi-gear"></i> Services
+                            <i class="bi bi-gear"></i> Menu Layanan
                         </a>
                     </li>
                     <li class="nav-item">
@@ -129,8 +129,8 @@ if ($result) {
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h6 class="card-title mb-0">Services</h6>
-                                        <h3 class="mb-0"><?php echo $services_count; ?></h3>
+                                        <h6 class="card-title mb-0">Menu Layanan</h6>
+                                        <h3 class="mb-0"><?php echo $menu_count; ?></h3>
                                     </div>
                                     <i class="bi bi-gear fs-1"></i>
                                 </div>

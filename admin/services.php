@@ -8,7 +8,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 // Handle Delete
 if ($action === 'delete' && isset($_GET['id'])) {
     $id = $_GET['id'];
-    $conn->query("DELETE FROM services WHERE id = $id");
+    $conn->query("DELETE FROM menu WHERE id = $id");
     header('Location: services.php?msg=deleted');
     exit();
 }
@@ -16,16 +16,17 @@ if ($action === 'delete' && isset($_GET['id'])) {
 // Handle Add/Edit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = sanitize($_POST['title']);
-    $description = sanitize($_POST['description']);
-    $icon = sanitize($_POST['icon']);
+    $url = sanitize($_POST['url']);
+    $parent_id = intval($_POST['parent_id']);
+    $order_by = intval($_POST['order_by']);
 
     if ($action === 'add') {
-        $conn->query("INSERT INTO services (title, description, icon) VALUES ('$title', '$description', '$icon')");
-        $message = 'Service berhasil ditambahkan!';
+        $conn->query("INSERT INTO menu (title, url, parent_id, order_by) VALUES ('$title', '$url', $parent_id, $order_by)");
+        $message = 'Menu berhasil ditambahkan!';
     } elseif ($action === 'edit') {
         $id = $_POST['id'];
-        $conn->query("UPDATE services SET title='$title', description='$description', icon='$icon' WHERE id=$id");
-        $message = 'Service berhasil diubah!';
+        $conn->query("UPDATE menu SET title='$title', url='$url', parent_id=$parent_id, order_by=$order_by WHERE id=$id");
+        $message = 'Menu berhasil diubah!';
     }
     
     header('Location: services.php?msg=' . urlencode($message));
@@ -35,18 +36,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $edit_data = null;
 if ($action === 'edit' && isset($_GET['id'])) {
     $id = $_GET['id'];
-    $result = $conn->query("SELECT * FROM services WHERE id = $id");
+    $result = $conn->query("SELECT * FROM menu WHERE id = $id");
     $edit_data = $result->fetch_assoc();
 }
 
-$services_list = $conn->query("SELECT * FROM services ORDER BY id DESC");
+// Get parent menus for dropdown
+$parent_menus = $conn->query("SELECT id, title FROM menu WHERE parent_id = 0 ORDER BY order_by ASC");
+
+$menu_list = $conn->query("SELECT m1.*, m2.title as parent_title FROM menu m1 LEFT JOIN menu m2 ON m1.parent_id = m2.id ORDER BY m1.parent_id ASC, m1.order_by ASC");
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services - Admin Panel</title>
+    <title>Menu Layanan - Admin Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="css/admin.css" rel="stylesheet">
@@ -74,7 +78,7 @@ $services_list = $conn->query("SELECT * FROM services ORDER BY id DESC");
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="services.php">
-                            <i class="bi bi-gear"></i> Services
+                            <i class="bi bi-gear"></i> Menu Layanan
                         </a>
                     </li>
                     <li class="nav-item">
@@ -108,10 +112,10 @@ $services_list = $conn->query("SELECT * FROM services ORDER BY id DESC");
             <!-- Main Content -->
             <main class="col-md-10 ms-sm-auto px-md-4">
                 <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Services Management</h1>
+                    <h1 class="h2">Menu Layanan Management</h1>
                     <?php if ($action !== 'add' && $action !== 'edit'): ?>
                         <a href="services.php?action=add" class="btn btn-primary">
-                            <i class="bi bi-plus-circle"></i> Tambah Service
+                            <i class="bi bi-plus-circle"></i> Tambah Menu
                         </a>
                     <?php endif; ?>
                 </div>
@@ -131,18 +135,20 @@ $services_list = $conn->query("SELECT * FROM services ORDER BY id DESC");
                                     <tr>
                                         <th>ID</th>
                                         <th>Title</th>
-                                        <th>Icon</th>
-                                        <th>Description</th>
+                                        <th>URL</th>
+                                        <th>Parent</th>
+                                        <th>Order</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php while ($row = $services_list->fetch_assoc()): ?>
+                                    <?php while ($row = $menu_list->fetch_assoc()): ?>
                                         <tr>
                                             <td><?php echo $row['id']; ?></td>
                                             <td><?php echo htmlspecialchars($row['title']); ?></td>
-                                            <td><i class="bi <?php echo htmlspecialchars($row['icon']); ?>"></i></td>
-                                            <td><?php echo substr(htmlspecialchars($row['description']), 0, 50) . '...'; ?></td>
+                                            <td><?php echo htmlspecialchars($row['url']); ?></td>
+                                            <td><?php echo $row['parent_title'] ? htmlspecialchars($row['parent_title']) : '-'; ?></td>
+                                            <td><?php echo $row['order_by']; ?></td>
                                             <td>
                                                 <a href="services.php?action=edit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil"></i>
@@ -161,7 +167,7 @@ $services_list = $conn->query("SELECT * FROM services ORDER BY id DESC");
                 <?php elseif ($action === 'add' || $action === 'edit'): ?>
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title mb-4"><?php echo $action === 'add' ? 'Tambah Service' : 'Edit Service'; ?></h5>
+                            <h5 class="card-title mb-4"><?php echo $action === 'add' ? 'Tambah Menu' : 'Edit Menu'; ?></h5>
                             <form method="POST">
                                 <?php if ($action === 'edit'): ?>
                                     <input type="hidden" name="id" value="<?php echo $edit_data['id']; ?>">
@@ -173,13 +179,25 @@ $services_list = $conn->query("SELECT * FROM services ORDER BY id DESC");
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Icon (Bootstrap Icon class, e.g., bi-gear)</label>
-                                    <input type="text" name="icon" class="form-control" value="<?php echo $edit_data ? htmlspecialchars($edit_data['icon']) : ''; ?>" placeholder="bi-gear" required>
+                                    <label class="form-label">URL</label>
+                                    <input type="text" name="url" class="form-control" value="<?php echo $edit_data ? htmlspecialchars($edit_data['url']) : ''; ?>" placeholder="Contoh: # atau /page">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Description</label>
-                                    <textarea name="description" class="form-control" rows="4" required><?php echo $edit_data ? htmlspecialchars($edit_data['description']) : ''; ?></textarea>
+                                    <label class="form-label">Parent Menu</label>
+                                    <select name="parent_id" class="form-control">
+                                        <option value="0">Top Level</option>
+                                        <?php while ($parent = $parent_menus->fetch_assoc()): ?>
+                                            <option value="<?php echo $parent['id']; ?>" <?php echo ($edit_data && $edit_data['parent_id'] == $parent['id']) ? 'selected' : ''; ?>>
+                                                <?php echo htmlspecialchars($parent['title']); ?>
+                                            </option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Order</label>
+                                    <input type="number" name="order_by" class="form-control" value="<?php echo $edit_data ? $edit_data['order_by'] : 0; ?>" min="0">
                                 </div>
 
                                 <div class="d-flex gap-2">

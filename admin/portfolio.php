@@ -124,7 +124,7 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="services.php">
-                            <i class="bi bi-gear"></i> Services
+                            <i class="bi bi-gear"></i> Menu Layanan
                         </a>
                     </li>
                     <li class="nav-item">

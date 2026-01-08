@@ -618,6 +618,17 @@ h6 {
 /*--------------------------------------------------------------
 # Global Footer
 --------------------------------------------------------------*/
+.footer-image {
+  position: absolute;
+  left: 15px;
+  bottom: -15px;
+}
+
+.footer-image img {
+  max-width: 300px;
+  height: auto;
+}
+
 .footer {
   color: var(--default-color);
   background-color: var(--background-color);
