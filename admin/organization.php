@@ -74,10 +74,10 @@ $org_list = $conn->query("SELECT * FROM organization_structure ORDER BY level AS
         }
 
         .sidebar-brand {
-            padding: 0 25px 30px;
+            padding: 0 20px 25px;
             color: white;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -85,8 +85,9 @@ $org_list = $conn->query("SELECT * FROM organization_structure ORDER BY level AS
 
         .nav-link {
             color: #94a3b8;
-            padding: 12px 25px;
+            padding: 10px 20px;
             font-weight: 500;
+            font-size: 0.875rem;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -103,11 +104,11 @@ $org_list = $conn->query("SELECT * FROM organization_structure ORDER BY level AS
         /* Main Content */
         .main-content {
             margin-left: 16.666667%; /* Menyesuaikan col-md-2 */
-            padding: 40px;
+            padding: 30px 40px;
         }
 
         .page-header {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         /* Form Styling */
@@ -178,31 +179,108 @@ $org_list = $conn->query("SELECT * FROM organization_structure ORDER BY level AS
         /* Table Styling */
         .table-container {
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             overflow: hidden;
+            border: 1px solid #e5e7eb;
         }
 
         .table {
             margin: 0;
+            border-collapse: collapse;
         }
 
         .table th {
-            background: var(--accent-color);
-            color: white;
+            background-color: #f3f4f6;
+            color: #374151;
             border: none;
-            padding: 15px;
+            padding: 12px 15px;
             font-weight: 600;
+            border-bottom: 2px solid #e5e7eb;
         }
 
         .table td {
-            padding: 15px;
-            border-bottom: 1px solid #e2e8f0;
+            padding: 12px 15px;
+            border-bottom: 1px solid #e5e7eb;
             vertical-align: middle;
         }
 
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
         .table tbody tr:hover {
-            background-color: #f8fafc;
+            background-color: #f9fafb;
+        }
+
+        /* Table Layout untuk Organization */
+        .table-org {
+            table-layout: fixed;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+
+        .table-org th {
+            background-color: #f3f4f6;
+            border-bottom: 2px solid #e5e7eb;
+            border: none;
+            padding: 12px 15px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .table-org td {
+            padding: 12px 15px;
+            vertical-align: middle;
+        }
+
+        /* Column width management untuk Organization */
+        .table-org th:nth-child(1),
+        .table-org td:nth-child(1) {
+            width: 25%;
+        }
+
+        .table-org th:nth-child(2),
+        .table-org td:nth-child(2) {
+            width: 25%;
+        }
+
+        .table-org th:nth-child(3),
+        .table-org td:nth-child(3) {
+            width: 15%;
+        }
+
+        .table-org th:nth-child(4),
+        .table-org td:nth-child(4) {
+            width: 10%;
+            text-align: center;
+        }
+
+        .table-org th:nth-child(5),
+        .table-org td:nth-child(5) {
+            width: 25%;
+            text-align: center;
+        }
+
+        /* Text truncation untuk Nama dan Jabatan */
+        .name-cell, .position-cell {
+            word-break: break-word;
+            max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { position: relative; min-height: auto; width: 100%; left: auto; top: auto; }
+            .main-content { margin-left: 0; padding: 20px; }
+            
+            .table-org {
+                table-layout: auto;
+                font-size: 0.8rem;
+            }
+            
+            .table-org th,
+            .table-org td {
+                padding: 8px 10px;
+            }
         }
 
         .action-btn {
@@ -255,7 +333,11 @@ $org_list = $conn->query("SELECT * FROM organization_structure ORDER BY level AS
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
-                transform: translateX(-100%);
+                position: relative;
+                width: 100%;
+                min-height: auto;
+                left: auto;
+                top: auto;
             }
 
             .main-content {
@@ -303,9 +385,6 @@ $org_list = $conn->query("SELECT * FROM organization_structure ORDER BY level AS
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="settings.php"><i class="bi bi-gear-wide-connected"></i> Settings</a>
-                </li>
-                <li class="nav-item mt-4 pt-4 border-top">
-                    <a class="nav-link text-danger" href="logout.php"><i class="bi bi-box-arrow-right"></i> Keluar</a>
                 </li>
             </ul>
         </nav>
@@ -381,47 +460,49 @@ $org_list = $conn->query("SELECT * FROM organization_structure ORDER BY level AS
             <?php else: ?>
                 <!-- List Table -->
                 <div class="table-container">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Jabatan</th>
-                                <th>Level</th>
-                                <th>Urutan</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php while ($org = $org_list->fetch_assoc()): ?>
+                    <div style="overflow-x: auto;">
+                        <table class="table table-hover table-org">
+                            <thead>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($org['name']); ?></td>
-                                    <td><?php echo htmlspecialchars($org['position']); ?></td>
-                                    <td>
-                                        <?php
-                                        $level_names = [
-                                            1 => 'Direktur',
-                                            2 => 'Manajemen',
-                                            3 => 'Operasional',
-                                            4 => 'Tenaga Ahli'
-                                        ];
-                                        echo $level_names[$org['level']] ?? 'Level ' . $org['level'];
-                                        ?>
-                                    </td>
-                                    <td><?php echo $org['order_in_level']; ?></td>
-                                    <td>
-                                        <a href="?action=edit&id=<?php echo $org['id']; ?>" class="action-btn btn-edit">
-                                            <i class="bi bi-pencil"></i> Edit
-                                        </a>
-                                        <a href="?action=delete&id=<?php echo $org['id']; ?>"
-                                           class="action-btn btn-delete"
-                                           onclick="return confirm('Yakin ingin menghapus?')">
-                                            <i class="bi bi-trash"></i> Hapus
-                                        </a>
-                                    </td>
+                                    <th>Nama</th>
+                                    <th>Jabatan</th>
+                                    <th>Level</th>
+                                    <th>Urutan</th>
+                                    <th>Aksi</th>
                                 </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php while ($org = $org_list->fetch_assoc()): ?>
+                                    <tr>
+                                        <td><span class="name-cell"><strong><?php echo htmlspecialchars($org['name']); ?></strong></span></td>
+                                        <td><span class="position-cell"><?php echo htmlspecialchars($org['position']); ?></span></td>
+                                        <td>
+                                            <?php
+                                            $level_names = [
+                                                1 => 'Direktur',
+                                                2 => 'Manajemen',
+                                                3 => 'Operasional',
+                                                4 => 'Tenaga Ahli'
+                                            ];
+                                            echo $level_names[$org['level']] ?? 'Level ' . $org['level'];
+                                            ?>
+                                        </td>
+                                        <td><?php echo $org['order_in_level']; ?></td>
+                                        <td style="text-align: center;">
+                                            <a href="?action=edit&id=<?php echo $org['id']; ?>" class="btn btn-sm btn-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="?action=delete&id=<?php echo $org['id']; ?>"
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Yakin ingin menghapus?')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             <?php endif; ?>
         </main>

@@ -103,10 +103,10 @@ $news_list = $conn->query("SELECT * FROM news ORDER BY created_at DESC");
         }
 
         .sidebar-brand {
-            padding: 0 25px 30px;
+            padding: 0 20px 25px;
             color: white;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -114,8 +114,9 @@ $news_list = $conn->query("SELECT * FROM news ORDER BY created_at DESC");
 
         .nav-link {
             color: #94a3b8;
-            padding: 12px 25px;
+            padding: 10px 20px;
             font-weight: 500;
+            font-size: 0.875rem;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -132,7 +133,7 @@ $news_list = $conn->query("SELECT * FROM news ORDER BY created_at DESC");
         /* Main Content */
         .main-content {
             margin-left: 16.666667%; /* Menyesuaikan col-md-2 */
-            padding: 40px;
+            padding: 30px 40px;
         }
 
         .page-header {
@@ -142,10 +143,10 @@ $news_list = $conn->query("SELECT * FROM news ORDER BY created_at DESC");
         /* Stat Card Styling */
         .stat-card {
             background: white;
-            border: none;
+            border: 1px solid #e5e7eb;
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             transition: transform 0.2s;
             height: 100%;
         }
@@ -178,12 +179,101 @@ $news_list = $conn->query("SELECT * FROM news ORDER BY created_at DESC");
             border-radius: 16px;
             padding: 30px;
             border-left: 5px solid var(--accent-color);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        /* Card Container */
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        /* Table Styling untuk News */
+        .table {
+            font-size: 0.875rem;
+        }
+
+        .table th {
+            background-color: #f3f4f6;
+            border-bottom: 2px solid #e5e7eb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+            border-color: #e5e7eb;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        /* Column width management */
+        .table-news {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        .table-news th:nth-child(1),
+        .table-news td:nth-child(1) {
+            width: 5%;
+        }
+
+        .table-news th:nth-child(2),
+        .table-news td:nth-child(2) {
+            width: 20%;
+        }
+
+        .table-news th:nth-child(3),
+        .table-news td:nth-child(3) {
+            width: 15%;
+        }
+
+        .table-news th:nth-child(4),
+        .table-news td:nth-child(4) {
+            width: 50%;
+        }
+
+        .table-news th:nth-child(5),
+        .table-news td:nth-child(5) {
+            width: 10%;
+            text-align: center;
+        }
+
+        /* Text truncation untuk column Description */
+        .desc-truncate {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+
+        /* Image cell styling */
+        .image-cell {
+            max-width: 150px;
+            word-break: break-all;
+            font-size: 0.75rem;
         }
 
         @media (max-width: 768px) {
             .sidebar { position: relative; min-height: auto; }
             .main-content { margin-left: 0; }
+            
+            .table-news {
+                table-layout: auto;
+            }
+            
+            .table-news th:nth-child(3),
+            .table-news td:nth-child(3) {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -221,9 +311,6 @@ $news_list = $conn->query("SELECT * FROM news ORDER BY created_at DESC");
                     <li class="nav-item">
                         <a class="nav-link" href="settings.php"><i class="bi bi-gear-wide-connected"></i> Settings</a>
                     </li>
-                    <li class="nav-item mt-4 pt-4 border-top">
-                        <a class="nav-link text-danger" href="logout.php"><i class="bi bi-box-arrow-right"></i> Keluar</a>
-                    </li>
                 </ul>
             </nav>
 
@@ -253,35 +340,37 @@ $news_list = $conn->query("SELECT * FROM news ORDER BY created_at DESC");
                 <?php if ($action === 'list'): ?>
                     <div class="card">
                         <div class="card-body">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Title</th>
-                                        <th>Image</th>
-                                        <th>Description</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php while ($row = $news_list->fetch_assoc()): ?>
+                            <div style="overflow-x: auto;">
+                                <table class="table table-hover table-news">
+                                    <thead>
                                         <tr>
-                                            <td><?php echo $row['id']; ?></td>
-                                            <td><?php echo htmlspecialchars($row['title']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['image']); ?></td>
-                                            <td><?php echo substr(htmlspecialchars($row['description']), 0, 50) . '...'; ?></td>
-                                            <td>
-                                                <a href="news.php?action=edit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                <a href="news.php?action=delete&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin dihapus?')">
-                                                    <i class="bi bi-trash"></i>
-                                                </a>
-                                            </td>
+                                            <th>ID</th>
+                                            <th>Title</th>
+                                            <th>Image</th>
+                                            <th>Description</th>
+                                            <th>Aksi</th>
                                         </tr>
-                                    <?php endwhile; ?>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <?php while ($row = $news_list->fetch_assoc()): ?>
+                                            <tr>
+                                                <td><?php echo $row['id']; ?></td>
+                                                <td><strong><?php echo htmlspecialchars($row['title']); ?></strong></td>
+                                                <td><span class="image-cell"><?php echo htmlspecialchars($row['image']); ?></span></td>
+                                                <td><span class="desc-truncate"><?php echo htmlspecialchars($row['description']); ?></span></td>
+                                                <td style="text-align: center;">
+                                                    <a href="news.php?action=edit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                    <a href="news.php?action=delete&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin dihapus?')">
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 

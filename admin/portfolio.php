@@ -125,10 +125,10 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
         }
 
         .sidebar-brand {
-            padding: 0 25px 30px;
+            padding: 0 20px 25px;
             color: white;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -136,8 +136,9 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
 
         .nav-link {
             color: #94a3b8;
-            padding: 12px 25px;
+            padding: 10px 20px;
             font-weight: 500;
+            font-size: 0.875rem;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -154,35 +155,35 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
         /* Main Content */
         .main-content {
             margin-left: 16.666667%; /* Menyesuaikan col-md-2 */
-            padding: 40px;
+            padding: 30px 40px;
         }
 
         .page-header {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         /* Stat Card Styling */
         .stat-card {
             background: white;
-            border: none;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             transition: transform 0.2s;
             height: 100%;
         }
 
-        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card:hover { transform: translateY(-3px); }
 
         .icon-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
+            font-size: 1.25rem;
+            margin-bottom: 10px;
         }
 
         /* Warna Ikon */
@@ -192,20 +193,115 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
         .bg-soft-orange { background: #fff7ed; color: #ea580c; }
         .bg-soft-cyan { background: #ecfeff; color: #0891b2; }
 
-        .stat-value { font-size: 1.75rem; font-weight: 700; margin-bottom: 5px; }
-        .stat-label { color: #64748b; font-weight: 500; font-size: 0.875rem; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; margin-bottom: 3px; }
+        .stat-label { color: #64748b; font-weight: 500; font-size: 0.8rem; }
 
         .welcome-banner {
             background: white;
-            border-radius: 16px;
-            padding: 30px;
+            border-radius: 12px;
+            padding: 20px;
             border-left: 5px solid var(--accent-color);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .welcome-banner h5 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .welcome-banner p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        /* Table Styling untuk Portfolio */
+        .table {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background-color: #f3f4f6;
+            border-bottom: 2px solid #e5e7eb;
+            font-weight: 600;
+            color: #374151;
+            padding: 12px 15px;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+            border-color: #e5e7eb;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        /* Card Container */
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        /* Column width management */
+        .table-portfolio {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        .table-portfolio th:nth-child(1),
+        .table-portfolio td:nth-child(1) {
+            width: 8%;
+        }
+
+        .table-portfolio th:nth-child(2),
+        .table-portfolio td:nth-child(2) {
+            width: 35%;
+        }
+
+        .table-portfolio th:nth-child(3),
+        .table-portfolio td:nth-child(3) {
+            width: 12%;
+        }
+
+        .table-portfolio th:nth-child(4),
+        .table-portfolio td:nth-child(4) {
+            width: 20%;
+        }
+
+        .table-portfolio th:nth-child(5),
+        .table-portfolio td:nth-child(5) {
+            width: 25%;
+            text-align: center;
+        }
+
+        /* Text truncation untuk Title */
+        .title-cell {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-wrap: break-word;
         }
 
         @media (max-width: 768px) {
-            .sidebar { position: relative; min-height: auto; }
-            .main-content { margin-left: 0; }
+            .sidebar { position: relative; min-height: auto; width: 100%; left: auto; top: auto; }
+            .main-content { margin-left: 0; padding: 20px; }
+            
+            .table-portfolio {
+                table-layout: auto;
+                font-size: 0.8rem;
+            }
+            
+            .table-portfolio th,
+            .table-portfolio td {
+                padding: 8px 10px;
+            }
         }
     </style>
 </head>
@@ -243,9 +339,6 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
                     <li class="nav-item">
                         <a class="nav-link" href="settings.php"><i class="bi bi-gear-wide-connected"></i> Settings</a>
                     </li>
-                    <li class="nav-item mt-4 pt-4 border-top">
-                        <a class="nav-link text-danger" href="logout.php"><i class="bi bi-box-arrow-right"></i> Keluar</a>
-                    </li>
                 </ul>
             </nav>
 
@@ -257,7 +350,7 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
                         <p class="text-muted">Kelola proyek dan portfolio perusahaan</p>
                     </div>
                     <?php if ($action !== 'add' && $action !== 'edit'): ?>
-                        <a href="portfolio.php?action=add" class="btn btn-primary">
+                        <a href="portfolio.php?action=add" class="btn btn-primary btn-sm">
                             <i class="bi bi-plus-circle"></i> Tambah Portfolio
                         </a>
                     <?php else: ?>
@@ -276,35 +369,37 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
                     <!-- Portfolio List -->
                     <div class="card">
                         <div class="card-body">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Title</th>
-                                        <th>Tahun</th>
-                                        <th>Thumbnail</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php while ($row = $portfolio_list->fetch_assoc()): ?>
+                            <div style="overflow-x: auto;">
+                                <table class="table table-hover table-portfolio">
+                                    <thead>
                                         <tr>
-                                            <td><?php echo $row['id']; ?></td>
-                                            <td><?php echo htmlspecialchars($row['title']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['category']); ?></td>
-                                            <td><?php echo $row['thumbnail'] ? '<img src="../assets/img/portfolio/' . htmlspecialchars($row['thumbnail']) . '" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">' : '-'; ?></td>
-                                            <td>
-                                                <a href="portfolio.php?action=edit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                <a href="portfolio.php?action=delete&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin dihapus?')">
-                                                    <i class="bi bi-trash"></i>
-                                                </a>
-                                            </td>
+                                            <th>ID</th>
+                                            <th>Title</th>
+                                            <th>Tahun</th>
+                                            <th>Thumbnail</th>
+                                            <th>Aksi</th>
                                         </tr>
-                                    <?php endwhile; ?>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <?php while ($row = $portfolio_list->fetch_assoc()): ?>
+                                            <tr>
+                                                <td><?php echo $row['id']; ?></td>
+                                                <td><span class="title-cell"><strong><?php echo htmlspecialchars($row['title']); ?></strong></span></td>
+                                                <td><?php echo htmlspecialchars($row['category']); ?></td>
+                                                <td><?php echo $row['thumbnail'] ? '<img src="../assets/img/portfolio/' . htmlspecialchars($row['thumbnail']) . '" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">' : '-'; ?></td>
+                                                <td style="text-align: center;">
+                                                    <a href="portfolio.php?action=edit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                    <a href="portfolio.php?action=delete&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin dihapus?')">
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 

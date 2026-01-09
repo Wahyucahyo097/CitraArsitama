@@ -138,10 +138,10 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
         }
 
         .sidebar-brand {
-            padding: 0 25px 30px;
+            padding: 0 20px 25px;
             color: white;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -149,8 +149,9 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
 
         .nav-link {
             color: #94a3b8;
-            padding: 12px 25px;
+            padding: 10px 20px;
             font-weight: 500;
+            font-size: 0.875rem;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -167,7 +168,7 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
         /* Main Content */
         .main-content {
             margin-left: 16.666667%; /* Menyesuaikan col-md-2 */
-            padding: 40px;
+            padding: 30px 40px;
         }
 
         .page-header {
@@ -177,10 +178,10 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
         /* Stat Card Styling */
         .stat-card {
             background: white;
-            border: none;
+            border: 1px solid #e5e7eb;
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             transition: transform 0.2s;
             height: 100%;
         }
@@ -213,7 +214,16 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
             border-radius: 16px;
             padding: 30px;
             border-left: 5px solid var(--accent-color);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        /* Card Container */
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
         @media (max-width: 768px) {
@@ -254,9 +264,6 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="settings.php"><i class="bi bi-gear-wide-connected"></i> Settings</a>
-                </li>
-                <li class="nav-item mt-4 pt-4 border-top">
-                    <a class="nav-link text-danger" href="logout.php"><i class="bi bi-box-arrow-right"></i> Keluar</a>
                 </li>
             </ul>
         </nav>

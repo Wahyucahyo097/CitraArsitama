@@ -79,10 +79,10 @@ $menu_list = $conn->query("SELECT m1.*, m2.title as parent_title FROM menu m1 LE
         }
 
         .sidebar-brand {
-            padding: 0 25px 30px;
+            padding: 0 20px 25px;
             color: white;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -90,8 +90,9 @@ $menu_list = $conn->query("SELECT m1.*, m2.title as parent_title FROM menu m1 LE
 
         .nav-link {
             color: #94a3b8;
-            padding: 12px 25px;
+            padding: 10px 20px;
             font-weight: 500;
+            font-size: 0.875rem;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -108,11 +109,11 @@ $menu_list = $conn->query("SELECT m1.*, m2.title as parent_title FROM menu m1 LE
         /* Main Content */
         .main-content {
             margin-left: 16.666667%; /* Menyesuaikan col-md-2 */
-            padding: 40px;
+            padding: 30px 40px;
         }
 
         .page-header {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         /* Stat Card Styling */
@@ -157,9 +158,54 @@ $menu_list = $conn->query("SELECT m1.*, m2.title as parent_title FROM menu m1 LE
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
+        /* Table Styling */
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        .table {
+            table-layout: fixed;
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: none;
+            padding: 12px 15px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            border-color: #e5e7eb;
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.2s;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
         @media (max-width: 768px) {
             .sidebar { position: relative; min-height: auto; }
             .main-content { margin-left: 0; }
+            .table { table-layout: auto; }
+            .table th, .table td { padding: 10px 8px; font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -196,9 +242,6 @@ $menu_list = $conn->query("SELECT m1.*, m2.title as parent_title FROM menu m1 LE
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="settings.php"><i class="bi bi-gear-wide-connected"></i> Settings</a>
-                    </li>
-                    <li class="nav-item mt-4 pt-4 border-top">
-                        <a class="nav-link text-danger" href="logout.php"><i class="bi bi-box-arrow-right"></i> Keluar</a>
                     </li>
                 </ul>
             </nav>
