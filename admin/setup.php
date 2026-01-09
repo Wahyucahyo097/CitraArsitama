@@ -7,7 +7,7 @@
 
 $servername = "localhost";
 $username = "root";
-$password = "";
+$password = "password";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password);
@@ -88,6 +88,23 @@ $sql = "CREATE TABLE IF NOT EXISTS team (
 
 if ($conn->query($sql) === TRUE) {
     echo "Table team created successfully<br>";
+} else {
+    echo "Error creating table: " . $conn->error . "<br>";
+}
+
+// Create organization_structure table
+$sql = "CREATE TABLE IF NOT EXISTS organization_structure (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    position VARCHAR(100) NOT NULL,
+    level INT NOT NULL DEFAULT 1,
+    order_in_level INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Table organization_structure created successfully<br>";
 } else {
     echo "Error creating table: " . $conn->error . "<br>";
 }
@@ -175,7 +192,37 @@ foreach ($default_settings as $setting) {
     }
 }
 
-// Check if admin user exists
+// Insert default organization structure
+$default_org = [
+    ['Rohman Eko Santoso, ST. M.Ars', 'Direktur', 1, 1],
+    ['Puput Fitria Setyawati, Amd.', 'Keuangan', 2, 1],
+    ['Ahmad Wahyudi', 'Administrasi', 2, 2],
+    ['Sudiyoko, ST.', 'Bagian Teknik & Operasional (Sipil)', 3, 1],
+    ['Anjar Saptoyogo, ST.', 'Bagian Teknik & Operasional (Arsitektur)', 3, 2],
+    ['Muhammadun, ST. MT', 'Ahli Sipil', 4, 1],
+    ['Bayu Pradana, ST. MT', 'Ahli M.E.P', 4, 2],
+    ['Fajar Nugroho, ST.', 'Ahli Planologi', 4, 3],
+    ['Ronny AB Wardhana, ST. MT', 'Ahli Arsitektur', 4, 4],
+    ['Mela Fitri Astuti, ST', 'Ahli Sipil', 4, 5],
+    ['Febri Dwi Astuti, S.Pwk', 'Ahli Planologi', 4, 6],
+    ['Bagas Harda Prastya, S.Ars', 'Ahli Arsitektur', 4, 7]
+];
+
+foreach ($default_org as $org) {
+    $name = $conn->real_escape_string($org[0]);
+    $position = $conn->real_escape_string($org[1]);
+    $level = $org[2];
+    $order = $org[3];
+    $check = $conn->query("SELECT * FROM organization_structure WHERE name = '$name'");
+    if ($check->num_rows == 0) {
+        $sql = "INSERT INTO organization_structure (name, position, level, order_in_level) VALUES ('$name', '$position', $level, $order)";
+        if ($conn->query($sql) === TRUE) {
+            echo "Organization member '$name' inserted successfully<br>";
+        } else {
+            echo "Error inserting organization member '$name': " . $conn->error . "<br>";
+        }
+    }
+}
 $result = $conn->query("SELECT * FROM admin_users WHERE email = 'admin@citraarsitama.com'");
 
 if ($result->num_rows == 0) {
