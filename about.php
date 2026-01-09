@@ -478,6 +478,47 @@ if ($team_result && $team_result->num_rows > 0) {
       </div>
 
 <section class="org-chart-container">
+<?php
+// Fetch organization structure from database
+$org_query = "SELECT name, position, level FROM organization_structure ORDER BY level ASC, order_in_level ASC";
+@$org_result = $conn->query($org_query);
+
+$org_data = [];
+if ($org_result && $org_result->num_rows > 0) {
+    while ($org_member = $org_result->fetch_assoc()) {
+        $org_data[$org_member['level']][] = $org_member;
+    }
+}
+
+// Display organization chart
+foreach ($org_data as $level => $members) {
+    if ($level == 4) {
+        // Special handling for level 4 (TENAGA AHLI)
+        echo '<p><strong>TENAGA AHLI</strong></p>';
+        echo '<div class="expert-grid">';
+        foreach ($members as $member) {
+            echo '<div class="org-node">';
+            echo '<div class="role">' . htmlspecialchars($member['position']) . '</div>';
+            echo '<div class="name">' . htmlspecialchars($member['name']) . '</div>';
+            echo '</div>';
+        }
+        echo '</div>';
+    } else {
+        echo '<div class="org-level">';
+        foreach ($members as $member) {
+            $bg_color = ($level == 1) ? '#2a5699' : (($level == 3) ? '#3c78d8' : '#4a86e8');
+            echo '<div class="org-node" style="background: ' . $bg_color . ';">';
+            echo '<div class="role">' . htmlspecialchars($member['position']) . '</div>';
+            echo '<div class="name">' . htmlspecialchars($member['name']) . '</div>';
+            echo '</div>';
+        }
+        echo '</div>';
+    }
+}
+
+// If no data in database, show default static data
+if (empty($org_data)) {
+?>
   <div class="org-level">
     <div class="org-node" style="background: #2a5699;">
       <div class="role">Direktur</div>
@@ -540,7 +581,9 @@ if ($team_result && $team_result->num_rows > 0) {
       <div class="name">Bagas Harda Prastya, S.Ars</div>
     </div>
   </div>
-</section>
+<?php
+}
+?>
 
     <section id="sbu" class="sbu section">
       <div class="container" data-aos="fade-up">
@@ -856,98 +899,98 @@ if ($team_result && $team_result->num_rows > 0) {
           <tr>
             <td data-label="No">1</td>
             <td data-label="Nama"><strong>Rohman Eko Santoso, ST. M.Ars</strong></td>
-            <td data-label="Pendidikan">S1 Arsitektur UNIKOM <br> S2 Arsitektur UNDIP</td>
+            <td data-label="Pendidikan">S1 Arsitektur Universitas Komputer Indonesia <br> S2 Arsitektur Universitas Diponegoro</td>
             <td data-label="Tahun Lulus">2005 <br> 2020</td>
             <td data-label="Keahlian">Arsitektur</td>
           </tr>
           <tr>
             <td data-label="No">2</td>
             <td data-label="Nama"><strong>Sus Andjasmara Kurmani, ST.</strong></td>
-            <td data-label="Pendidikan">S1 Arsitektur UNIKA Soegijapranata</td>
+            <td data-label="Pendidikan">S1 Arsitektur Universitas Katolik Soegijapranata</td>
             <td data-label="Tahun Lulus">1995</td>
             <td data-label="Keahlian">Arsitektur</td>
           </tr>
           <tr>
             <td data-label="No">3</td>
             <td data-label="Nama"><strong>Ronny AB Wardhana, ST, MT</strong></td>
-            <td data-label="Pendidikan">S1 Arsitektur UNIKA Soegijapranata <br> S2 Arsitektur UNDIP</td>
+            <td data-label="Pendidikan">S1 Arsitektur Universitas Katolik Soegijapranata <br> S2 Arsitektur Universitas Diponegoro</td>
             <td data-label="Tahun Lulus">1995 <br> 1999</td>
             <td data-label="Keahlian">Arsitektur</td>
           </tr>
           <tr>
             <td data-label="No">4</td>
             <td data-label="Nama"><strong>Ktut Christy S, ST.</strong></td>
-            <td data-label="Pendidikan">S1 Arsitektur UNDIP</td>
+            <td data-label="Pendidikan">S1 Arsitektur Universitas Diponegoro</td>
             <td data-label="Tahun Lulus">2008</td>
             <td data-label="Keahlian">Arsitektur</td>
           </tr>
           <tr>
             <td data-label="No">5</td>
             <td data-label="Nama"><strong>Anjar Saptoyogo, ST.</strong></td>
-            <td data-label="Pendidikan">S1 Arsitektur UNNES</td>
+            <td data-label="Pendidikan">S1 Arsitektur Universitas Negeri Semarang</td>
             <td data-label="Tahun Lulus">2008</td>
             <td data-label="Keahlian">Arsitektur</td>
           </tr>
           <tr>
             <td data-label="No">6</td>
             <td data-label="Nama"><strong>Ria Ripardi Wahyu Lestari, S.Ars.</strong></td>
-            <td data-label="Pendidikan">S1 Arsitektur UNIKA Soegijapranata</td>
+            <td data-label="Pendidikan">S1 Arsitektur Universitas Katolik Soegijapranata</td>
             <td data-label="Tahun Lulus">2016</td>
             <td data-label="Keahlian">Arsitektur</td>
           </tr>
           <tr>
             <td data-label="No">7</td>
             <td data-label="Nama"><strong>Bagas Harda Prasetyo, S.Ars.</strong></td>
-            <td data-label="Pendidikan">S1 Arsitektur UNIKA Soegijapranata</td>
+            <td data-label="Pendidikan">S1 Arsitektur Universitas Katolik Soegijapranata</td>
             <td data-label="Tahun Lulus">2017</td>
             <td data-label="Keahlian">Arsitektur</td>
           </tr>
           <tr>
             <td data-label="No">8</td>
             <td data-label="Nama"><strong>Dwi Guntoro, ST, MT</strong></td>
-            <td data-label="Pendidikan">S1 Sipil USM <br> S2 MTPK UNDIP</td>
+            <td data-label="Pendidikan">S1 Sipil Universitas Semarang <br> S2 MTPK Universitas Diponegoro</td>
             <td data-label="Tahun Lulus">1999 <br> 2004</td>
             <td data-label="Keahlian">Sipil</td>
           </tr>
           <tr>
             <td data-label="No">9</td>
             <td data-label="Nama"><strong>Muhammadun, ST, MT</strong></td>
-            <td data-label="Pendidikan">S1 Sipil UNISSULA <br> S2 Sipil UNISSULA</td>
+            <td data-label="Pendidikan">S1 Sipil Universitas Sultan Agung <br> S2 Sipil Universitas Sultan Agung</td>
             <td data-label="Tahun Lulus">1994 <br> 2009</td>
             <td data-label="Keahlian">Sipil</td>
           </tr>
           <tr>
             <td data-label="No">10</td>
             <td data-label="Nama"><strong>Sudiyoko, ST</strong></td>
-            <td data-label="Pendidikan">S1 Sipil UNTAG 1945</td>
+            <td data-label="Pendidikan">S1 Sipil Universitas 17 Agustus 1945</td>
             <td data-label="Tahun Lulus">1998</td>
             <td data-label="Keahlian">Sipil</td>
           </tr>
           <tr>
             <td data-label="No">11</td>
             <td data-label="Nama"><strong>Wahyu Bagus H, ST</strong></td>
-            <td data-label="Pendidikan">S1 Sipil UNDIP</td>
+            <td data-label="Pendidikan">S1 Sipil Universitas Diponegoro</td>
             <td data-label="Tahun Lulus">1998</td>
             <td data-label="Keahlian">Sipil</td>
           </tr>
           <tr>
             <td data-label="No">12</td>
             <td data-label="Nama"><strong>Mela Fitri Astuti, ST.</strong></td>
-            <td data-label="Pendidikan">S1 Sipil UNTAG 1945</td>
+            <td data-label="Pendidikan">S1 Sipil Universitas 17 Agustus 1945</td>
             <td data-label="Tahun Lulus">2017</td>
             <td data-label="Keahlian">Sipil</td>
           </tr>
           <tr>
             <td data-label="No">13</td>
             <td data-label="Nama"><strong>Bayu Pradana, ST, MT</strong></td>
-            <td data-label="Pendidikan">S1 T. Elektro USM <br> S2 M. Elektro UNDIP</td>
+            <td data-label="Pendidikan">S1 T. Elektro Universitas Semarang <br> S2 M. Elektro Universitas Diponegoro</td>
             <td data-label="Tahun Lulus">2017 <br> 2021</td>
             <td data-label="Keahlian">Mechanical Electrical Plumbing</td>
           </tr>
           <tr>
             <td data-label="No">14</td>
             <td data-label="Nama"><strong>Sigit Nurmansyah, S.Si</strong></td>
-            <td data-label="Pendidikan">S1 Elektronika & Instrumensi UGM</td>
+            <td data-label="Pendidikan">S1 Elektronika & Instrumensi Universitas Gadjah Mada</td>
             <td data-label="Tahun Lulus">2012</td>
             <td data-label="Keahlian">Mechanical Electrical Plumbing</td>
           </tr>
