@@ -2,7 +2,7 @@
 // Database Configuration
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_PASS', 'password');
 define('DB_NAME', 'citra_arsitama');
 
 // Create connection

@@ -14,6 +14,24 @@ if ($action === 'delete' && isset($_GET['id'])) {
     exit();
 }
 
+// Handle Delete Detail Image
+if ($action === 'delete_detail' && isset($_GET['id']) && isset($_GET['file'])) {
+    $id = $_GET['id'];
+    $file = basename($_GET['file']);
+    $result = $conn->query("SELECT details_images FROM portfolio WHERE id = $id");
+    if ($result && $result->num_rows) {
+        $row = $result->fetch_assoc();
+        $details_images = json_decode($row['details_images'], true) ?: [];
+        $details_images = array_values(array_filter($details_images, function($v) use ($file){ return $v !== $file; }));
+        $details_images_json = json_encode($details_images);
+        $conn->query("UPDATE portfolio SET details_images='$details_images_json' WHERE id=$id");
+        $path = "../assets/img/portfolio/details/" . $file;
+        if (file_exists($path)) @unlink($path);
+    }
+    header('Location: portfolio.php?action=edit&id=' . $id . '&msg=Detail image deleted');
+    exit();
+}
+
 // Handle Add/Edit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = sanitize($_POST['title']);
@@ -459,7 +477,22 @@ $portfolio_list = $conn->query("SELECT * FROM portfolio ORDER BY id DESC");
                                     <label class="form-label">Details Images (Multiple)</label>
                                     <input type="file" name="details_images[]" class="form-control" accept="image/*" multiple>
                                     <?php if ($edit_data && $edit_data['details_images']): ?>
-                                        <small class="text-muted">Current details images: <?php echo htmlspecialchars($edit_data['details_images']); ?></small>
+                                        <div class="mt-3">
+                                            <label class="form-label">Current Details Images:</label>
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <?php 
+                                                $details_images = json_decode($edit_data['details_images'], true) ?: [];
+                                                foreach ($details_images as $img): 
+                                                ?>
+                                                    <div class="position-relative">
+                                                        <img src="../assets/img/portfolio/details/<?php echo htmlspecialchars($img); ?>" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd;">
+                                                        <a href="portfolio.php?action=delete_detail&id=<?php echo $edit_data['id']; ?>&file=<?php echo urlencode($img); ?>" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="margin: -5px;" onclick="return confirm('Yakin hapus gambar ini?')">
+                                                            <i class="bi bi-x"></i>
+                                                        </a>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        </div>
                                     <?php endif; ?>
                                 </div>
 

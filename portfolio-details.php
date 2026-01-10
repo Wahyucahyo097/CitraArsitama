@@ -2,6 +2,14 @@
 // Dynamic portfolio details page — fetches single portfolio item by ID from DB
 include __DIR__ . '/admin/config.php';
 
+// Load social media links
+$social_links = [];
+$social_keys = ['whatsapp', 'instagram', 'youtube', 'facebook', 'twitter', 'linkedin'];
+foreach ($social_keys as $key) {
+    $r = $conn->query("SELECT value FROM settings WHERE `key`='$key' LIMIT 1");
+    $social_links[$key] = ($r && $r->num_rows) ? $r->fetch_assoc()['value'] : '';
+}
+
 // Get portfolio ID from URL
 $portfolio_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
@@ -229,10 +237,20 @@ $project_date = htmlspecialchars($portfolio['project_date'] ?? date('Y-m-d'));
     <p class="mb-2" style="color: #333;">Copyright © 2025 Citra Arsitama. All right reserved.</p>
 
     <div class="footer-social" style="display: flex; justify-content: center; gap: 14px; font-size: 1.25rem;">
-      <a href="#" style="text-decoration: none;"><i class="bi bi-facebook"></i></a>
-      <a href="https://www.instagram.com/studio_citraarsitama?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" style="text-decoration: none;"><i class="bi bi-instagram"></i></a>
-      <a href="#" style="text-decoration: none;"><i class="bi bi-linkedin"></i></a>
-      <a href="#" style="text-decoration: none;"><i class="bi bi-youtube"></i></a>
+      <?php
+      $social_icons = [
+          'facebook' => 'bi-facebook',
+          'instagram' => 'bi-instagram',
+          'linkedin' => 'bi-linkedin',
+          'youtube' => 'bi-youtube',
+          'twitter' => 'bi-twitter'
+      ];
+      foreach ($social_icons as $key => $icon) {
+          if (!empty($social_links[$key])) {
+              echo '<a href="' . htmlspecialchars($social_links[$key]) . '" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><i class="bi ' . $icon . '"></i></a>';
+          }
+      }
+      ?>
     </div>
 
   </div>
