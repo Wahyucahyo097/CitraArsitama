@@ -89,10 +89,10 @@ $team_list = $conn->query("SELECT * FROM team ORDER BY id DESC");
         }
 
         .sidebar-brand {
-            padding: 0 25px 30px;
+            padding: 0 20px 25px;
             color: white;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -100,8 +100,9 @@ $team_list = $conn->query("SELECT * FROM team ORDER BY id DESC");
 
         .nav-link {
             color: #94a3b8;
-            padding: 12px 25px;
+            padding: 10px 20px;
             font-weight: 500;
+            font-size: 0.875rem;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -118,25 +119,25 @@ $team_list = $conn->query("SELECT * FROM team ORDER BY id DESC");
         /* Main Content */
         .main-content {
             margin-left: 16.666667%; /* Menyesuaikan col-md-2 */
-            padding: 40px;
+            padding: 30px 40px;
         }
 
         .page-header {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         /* Stat Card Styling */
         .stat-card {
             background: white;
-            border: none;
+            border: 1px solid #e5e7eb;
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             transition: transform 0.2s;
             height: 100%;
         }
 
-        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card:hover { transform: translateY(-3px); }
 
         .icon-box {
             width: 48px;
@@ -164,7 +165,50 @@ $team_list = $conn->query("SELECT * FROM team ORDER BY id DESC");
             border-radius: 16px;
             padding: 30px;
             border-left: 5px solid var(--accent-color);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        /* Table Styling */
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        .table {
+            table-layout: fixed;
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: none;
+            padding: 12px 15px;
+            font-weight: 600;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            border-color: #e5e7eb;
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.2s;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
         }
 
         @media (max-width: 768px) {
@@ -205,9 +249,6 @@ $team_list = $conn->query("SELECT * FROM team ORDER BY id DESC");
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="settings.php"><i class="bi bi-gear-wide-connected"></i> Settings</a>
-                    </li>
-                    <li class="nav-item mt-4 pt-4 border-top">
-                        <a class="nav-link text-danger" href="logout.php"><i class="bi bi-box-arrow-right"></i> Keluar</a>
                     </li>
                 </ul>
             </nav>

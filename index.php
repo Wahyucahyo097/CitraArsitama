@@ -1,6 +1,14 @@
 <?php
 // Dynamic frontpage - mirrors index.html layout but loads Portfolio and Clients from database
 include __DIR__ . '/admin/config.php';
+
+// Load social media links
+$social_links = [];
+$social_keys = ['whatsapp', 'instagram', 'youtube', 'facebook', 'twitter', 'linkedin'];
+foreach ($social_keys as $key) {
+    $r = $conn->query("SELECT value FROM settings WHERE `key`='$key' LIMIT 1");
+    $social_links[$key] = ($r && $r->num_rows) ? $r->fetch_assoc()['value'] : '';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -327,11 +335,11 @@ if ($portfolio_q && $portfolio_q->num_rows > 0) {
 ?>
 <?php
 ?>
-       
-
-    <a href="https://wa.me/081226215789" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
-    <i class="bi bi-whatsapp"></i>
-</a>
+    <?php if (!empty($social_links['whatsapp'])): ?>
+    <a href="https://wa.me/<?php echo htmlspecialchars($social_links['whatsapp']); ?>" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+    <?php endif; ?>
 
 
   </main>
@@ -345,10 +353,20 @@ if ($portfolio_q && $portfolio_q->num_rows > 0) {
 
     <div class="footer-social text-center mb-3"
          style="display: flex; justify-content: center; gap: 14px; font-size: 1.25rem;">
-      <a href="#"><i class="bi bi-facebook"></i></a>
-      <a href="https://www.instagram.com/studio_citraarsitama"><i class="bi bi-instagram"></i></a>
-      <a href="#"><i class="bi bi-linkedin"></i></a>
-      <a href="#"><i class="bi bi-youtube"></i></a>
+      <?php
+      $social_icons = [
+          'facebook' => 'bi-facebook',
+          'instagram' => 'bi-instagram',
+          'linkedin' => 'bi-linkedin',
+          'youtube' => 'bi-youtube',
+          'twitter' => 'bi-twitter'
+      ];
+      foreach ($social_icons as $key => $icon) {
+          if (!empty($social_links[$key])) {
+              echo '<a href="' . htmlspecialchars($social_links[$key]) . '" target="_blank" rel="noopener noreferrer"><i class="bi ' . $icon . '"></i></a>';
+          }
+      }
+      ?>
     </div>
 
     <!-- Gambar kanan bawah footer -->

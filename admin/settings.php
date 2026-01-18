@@ -102,6 +102,29 @@ if (isset($_GET['action']) && $_GET['action'] === 'remove_hero' && isset($_GET['
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_social') {
+    $social_links = [
+        'whatsapp' => sanitize($_POST['whatsapp']),
+        'instagram' => sanitize($_POST['instagram']),
+        'youtube' => sanitize($_POST['youtube']),
+        'facebook' => sanitize($_POST['facebook']),
+        'twitter' => sanitize($_POST['twitter']),
+        'linkedin' => sanitize($_POST['linkedin'])
+    ];
+
+    foreach ($social_links as $key => $value) {
+        $check = $conn->query("SELECT * FROM settings WHERE `key`='$key'");
+        if ($check->num_rows) {
+            $conn->query("UPDATE settings SET `value`='$value' WHERE `key`='$key'");
+        } else {
+            $conn->query("INSERT INTO settings (`key`,`value`) VALUES ('$key', '$value')");
+        }
+    }
+
+    header('Location: settings.php?msg=Social media links updated');
+    exit();
+}
+
 $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']}")->fetch_assoc();
 ?>
 <!DOCTYPE html>
@@ -138,10 +161,10 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
         }
 
         .sidebar-brand {
-            padding: 0 25px 30px;
+            padding: 0 20px 25px;
             color: white;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -149,8 +172,9 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
 
         .nav-link {
             color: #94a3b8;
-            padding: 12px 25px;
+            padding: 10px 20px;
             font-weight: 500;
+            font-size: 0.875rem;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -167,7 +191,7 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
         /* Main Content */
         .main-content {
             margin-left: 16.666667%; /* Menyesuaikan col-md-2 */
-            padding: 40px;
+            padding: 30px 40px;
         }
 
         .page-header {
@@ -177,10 +201,10 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
         /* Stat Card Styling */
         .stat-card {
             background: white;
-            border: none;
+            border: 1px solid #e5e7eb;
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             transition: transform 0.2s;
             height: 100%;
         }
@@ -213,7 +237,16 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
             border-radius: 16px;
             padding: 30px;
             border-left: 5px solid var(--accent-color);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        /* Card Container */
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
         @media (max-width: 768px) {
@@ -254,9 +287,6 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="settings.php"><i class="bi bi-gear-wide-connected"></i> Settings</a>
-                </li>
-                <li class="nav-item mt-4 pt-4 border-top">
-                    <a class="nav-link text-danger" href="logout.php"><i class="bi bi-box-arrow-right"></i> Keluar</a>
                 </li>
             </ul>
         </nav>
@@ -370,6 +400,56 @@ $admin = $conn->query("SELECT * FROM admin_users WHERE id={$_SESSION['admin_id']
                                         <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- Social Media Links -->
+                    <div class="col-md-12">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4"><i class="bi bi-share"></i> Social Media Links</h5>
+                                <?php
+                                // Load current social links
+                                $social = [];
+                                $social_keys = ['whatsapp', 'instagram', 'youtube', 'facebook', 'twitter', 'linkedin'];
+                                foreach ($social_keys as $key) {
+                                    $r = $conn->query("SELECT value FROM settings WHERE `key`='$key' LIMIT 1");
+                                    $social[$key] = ($r && $r->num_rows) ? $r->fetch_assoc()['value'] : '';
+                                }
+                                ?>
+                                <form method="POST">
+                                    <input type="hidden" name="action" value="update_social">
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">WhatsApp Number (e.g. 6281226215789)</label>
+                                            <input type="text" name="whatsapp" class="form-control" value="<?php echo htmlspecialchars($social['whatsapp']); ?>" placeholder="6281226215789">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Instagram URL</label>
+                                            <input type="url" name="instagram" class="form-control" value="<?php echo htmlspecialchars($social['instagram']); ?>" placeholder="https://www.instagram.com/username">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">YouTube URL</label>
+                                            <input type="url" name="youtube" class="form-control" value="<?php echo htmlspecialchars($social['youtube']); ?>" placeholder="https://www.youtube.com/channel/...">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Facebook URL</label>
+                                            <input type="url" name="facebook" class="form-control" value="<?php echo htmlspecialchars($social['facebook']); ?>" placeholder="https://www.facebook.com/username">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Twitter URL</label>
+                                            <input type="url" name="twitter" class="form-control" value="<?php echo htmlspecialchars($social['twitter']); ?>" placeholder="https://twitter.com/username">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">LinkedIn URL</label>
+                                            <input type="url" name="linkedin" class="form-control" value="<?php echo htmlspecialchars($social['linkedin']); ?>" placeholder="https://www.linkedin.com/in/username">
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Update Social Links</button>
+                                </form>
                             </div>
                         </div>
                     </div>

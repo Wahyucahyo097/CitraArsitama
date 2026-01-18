@@ -58,6 +58,7 @@ $clients_list = $conn->query("SELECT * FROM clients ORDER BY id DESC");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clients - Citra Arsitama</title>
+    <link rel="stylesheet" href="/css/admin.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -86,10 +87,10 @@ $clients_list = $conn->query("SELECT * FROM clients ORDER BY id DESC");
         }
 
         .sidebar-brand {
-            padding: 0 25px 30px;
+            padding: 0 20px 25px;
             color: white;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -97,8 +98,9 @@ $clients_list = $conn->query("SELECT * FROM clients ORDER BY id DESC");
 
         .nav-link {
             color: #94a3b8;
-            padding: 12px 25px;
+            padding: 10px 20px;
             font-weight: 500;
+            font-size: 0.875rem;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -115,7 +117,7 @@ $clients_list = $conn->query("SELECT * FROM clients ORDER BY id DESC");
         /* Main Content */
         .main-content {
             margin-left: 16.666667%; /* Menyesuaikan col-md-2 */
-            padding: 40px;
+            padding: 30px 40px;
         }
 
         .page-header {
@@ -125,10 +127,10 @@ $clients_list = $conn->query("SELECT * FROM clients ORDER BY id DESC");
         /* Stat Card Styling */
         .stat-card {
             background: white;
-            border: none;
+            border: 1px solid #e5e7eb;
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             transition: transform 0.2s;
             height: 100%;
         }
@@ -161,7 +163,16 @@ $clients_list = $conn->query("SELECT * FROM clients ORDER BY id DESC");
             border-radius: 16px;
             padding: 30px;
             border-left: 5px solid var(--accent-color);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        /* Card Container */
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
         @media (max-width: 768px) {
@@ -202,9 +213,6 @@ $clients_list = $conn->query("SELECT * FROM clients ORDER BY id DESC");
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="settings.php"><i class="bi bi-gear-wide-connected"></i> Settings</a>
-                    </li>
-                    <li class="nav-item mt-4 pt-4 border-top">
-                        <a class="nav-link text-danger" href="logout.php"><i class="bi bi-box-arrow-right"></i> Keluar</a>
                     </li>
                 </ul>
             </nav>
