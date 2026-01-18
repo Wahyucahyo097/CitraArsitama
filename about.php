@@ -301,7 +301,7 @@ if ($result && $result->num_rows > 0) {
   <main class="main">
 
     <!-- Page Title -->
-    <div class="page-title dark-background" data-aos="fade" style="background-image: url(assets/img/P1.jpg);">
+    <div class="page-title dark-background" data-aos="fade" style="background-image: url(assets/img/back1.jpg);">
       <div class="container position-relative">
         <h1>About</h1>
         <p><?php echo $about_title; ?></p>
@@ -1041,7 +1041,7 @@ if (empty($org_data)) {
   <div class="container position-relative">
 
     <p class="mb-2 text-center" style="color: #333;">
-      Copyright © 2025 Citra Arsitama. All right reserved.
+      Copyright © 2026 Citra Arsitama. All right reserved.
     </p>
 
     <div class="footer-social text-center mb-3"

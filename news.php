@@ -231,7 +231,7 @@ if ($news_result && $news_result->num_rows > 0) {
   <div class="container position-relative">
 
     <p class="mb-2 text-center" style="color: #333;">
-      Copyright © 2025 Citra Arsitama. All right reserved.
+      Copyright © 2026 Citra Arsitama. All right reserved.
     </p>
 
     <div class="footer-social text-center mb-3"
